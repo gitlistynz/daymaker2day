@@ -4,6 +4,8 @@ on:
   push:
     branches: [ main, master ]
 
+concurrency: github-pages
+
 permissions:
   pages: write
   id-token: write

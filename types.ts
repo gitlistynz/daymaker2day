@@ -9,10 +9,18 @@ export interface ServiceItem {
 export enum AppView {
   HOME = 'HOME',
   MENU = 'MENU',
+  SESSION_DETAIL = 'SESSION_DETAIL',
+  BOOK_OR_GIFT = 'BOOK_OR_GIFT',
   BOOKING = 'BOOKING',
+  PAYMENT = 'PAYMENT',
+  GIFT_DELIVERY = 'GIFT_DELIVERY',
   CONFIRMATION = 'CONFIRMATION',
   PROFILE = 'PROFILE'
 }
+
+export type BookingType = 'BOOK' | 'GIFT';
+
+export type GiftDeliveryMethod = 'EMAIL' | 'COPY_LINK' | 'SHARE';
 
 export interface BookingDetails {
   serviceId: string | null;
@@ -20,6 +28,11 @@ export interface BookingDetails {
   timeSlot: string | null;
   userEmail: string;
   userName: string;
+  bookingType: BookingType | null; // 'BOOK' or 'GIFT'
+  recipientEmail?: string; // For gifts
+  recipientName?: string; // For gifts
+  giftDeliveryMethod?: GiftDeliveryMethod; // How to send gift
+  giftLink?: string; // Unique gift link
 }
 
 export interface ChatMessage {

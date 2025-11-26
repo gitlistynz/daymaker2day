@@ -1,66 +1,74 @@
 import { ServiceItem } from './types';
 
-// A diverse list of 50 micro-services for 25-minute slots
+// 50 FUN + SIMPLE 25-MIN ZOOM SESSIONS
 export const SERVICES_LIST: ServiceItem[] = [
-  // Wellness & Mindset
-  { id: '1', category: 'Wellness', title: 'Guided Breathwork', description: 'Reset your nervous system.', iconName: 'Wind' },
-  { id: '2', category: 'Wellness', title: 'Power Meditation', description: '25 min deep focus guided meditation.', iconName: 'Brain' },
-  { id: '3', category: 'Wellness', title: 'Desktop Yoga', description: 'Stretch without leaving your chair.', iconName: 'Activity' },
-  { id: '4', category: 'Wellness', title: 'Nutrition Audit', description: 'Quick review of your daily intake.', iconName: 'Apple' },
-  { id: '5', category: 'Wellness', title: 'Sleep Hygiene Check', description: 'Optimize your bedroom for rest.', iconName: 'Moon' },
-  { id: '6', category: 'Wellness', title: 'Anxiety Release', description: 'Grounding techniques for stress.', iconName: 'Anchor' },
-  { id: '7', category: 'Wellness', title: 'Positive Affirmations', description: 'Live guided affirmation session.', iconName: 'Heart' },
-  { id: '8', category: 'Wellness', title: 'Ergonomic Review', description: 'Fix your desk posture now.', iconName: 'Monitor' },
-  { id: '9', category: 'Wellness', title: 'Hydration Strategy', description: 'Plan your water intake.', iconName: 'Droplet' },
-  { id: '10', category: 'Wellness', title: 'Digital Detox Plan', description: 'Strategy to unplug effectively.', iconName: 'SmartphoneOff' },
+  // 🔥 AI + CREATIVE FUN (1-12)
+  { id: '1', category: 'AI + Creative Fun', title: 'AI Logo Remix', description: 'You describe a vibe → I generate 5 logo concepts live.', iconName: 'Palette' },
+  { id: '2', category: 'AI + Creative Fun', title: 'AI Rap/Song Maker', description: 'We create a funny or sentimental song for someone.', iconName: 'Music' },
+  { id: '3', category: 'AI + Creative Fun', title: 'Family Song Session', description: 'Make a custom family theme song together.', iconName: 'Users' },
+  { id: '4', category: 'AI + Creative Fun', title: 'AI Photo Glow-Up', description: 'Upgrade one selfie or pet photo together.', iconName: 'Image' },
+  { id: '5', category: 'AI + Creative Fun', title: 'Brand Name Generator', description: 'Live brainstorm + AI-generated names.', iconName: 'Lightbulb' },
+  { id: '6', category: 'AI + Creative Fun', title: 'AI Gift Creator', description: 'Design a digital gift (poster, card, avatar).', iconName: 'Gift' },
+  { id: '7', category: 'AI + Creative Fun', title: 'AI Pet Portrait', description: 'Turn your pet into a knight, queen, superhero.', iconName: 'Dog' },
+  { id: '8', category: 'AI + Creative Fun', title: 'AI Poster Party', description: 'Make a mini movie poster of YOU.', iconName: 'Film' },
+  { id: '9', category: 'AI + Creative Fun', title: 'AI Superhero Version of You', description: 'Create a character with powers and backstory.', iconName: 'Zap' },
+  { id: '10', category: 'AI + Creative Fun', title: 'AI Cartoon Avatar', description: 'Turn yourself into a cartoon.', iconName: 'Smile' },
+  { id: '11', category: 'AI + Creative Fun', title: 'Custom Playlist Builder', description: 'Pick your mood → we build a playlist.', iconName: 'Volume2' },
+  { id: '12', category: 'AI + Creative Fun', title: 'Story-to-Song Session', description: 'Tell me a story → I turn it into a rhyme.', iconName: 'Mic' },
 
-  // Professional & Productivity
-  { id: '11', category: 'Productivity', title: 'Email Inbox Zero', description: 'Slay your inbox with a pro.', iconName: 'Mail' },
-  { id: '12', category: 'Productivity', title: 'LinkedIn Profile Roast', description: 'Honest feedback on your profile.', iconName: 'Linkedin' },
-  { id: '13', category: 'Productivity', title: 'Resume Quick-Fix', description: 'Spot check for major errors.', iconName: 'FileText' },
-  { id: '14', category: 'Productivity', title: 'Task Prioritization', description: 'Sort your to-do list for today.', iconName: 'List' },
-  { id: '15', category: 'Productivity', title: 'Pitch Deck Review', description: 'Feedback on your slide logic.', iconName: 'Presentation' },
-  { id: '16', category: 'Productivity', title: 'Negotiation Prep', description: 'Roleplay a tough conversation.', iconName: 'Users' },
-  { id: '17', category: 'Productivity', title: 'Idea Brainstorm', description: 'Bounce ideas off a creative.', iconName: 'Lightbulb' },
-  { id: '18', category: 'Productivity', title: 'Notion Setup', description: 'Quick page organization.', iconName: 'Layout' },
-  { id: '19', category: 'Productivity', title: 'Goal Setting', description: 'Define your weekly OKRs.', iconName: 'Target' },
-  { id: '20', category: 'Productivity', title: 'Time Blocking', description: 'Structure your calendar.', iconName: 'Calendar' },
+  // 💡 IDEA DEVELOPMENT (13-17)
+  { id: '13', category: 'Idea Development', title: 'Small Business Starter Spark', description: 'Light brainstorming for a new side hustle.', iconName: 'Briefcase' },
+  { id: '14', category: 'Idea Development', title: 'Product Idea Check', description: 'Talk through a quick idea to see if it\'s solid.', iconName: 'Zap' },
+  { id: '15', category: 'Idea Development', title: 'Brand Personality Builder', description: 'Define the tone/look of your future brand.', iconName: 'Palette' },
+  { id: '16', category: 'Idea Development', title: 'Catchy Slogan Workshop', description: 'Create 3–6 memorable taglines.', iconName: 'Type' },
+  { id: '17', category: 'Idea Development', title: 'Concept Sharpening', description: 'You bring an idea → we make it stronger.', iconName: 'Edit' },
 
-  // Tech & Skills
-  { id: '21', category: 'Tech', title: 'Excel Formula Fix', description: 'Solve that one broken cell.', iconName: 'Grid' },
-  { id: '22', category: 'Tech', title: 'React Component Debug', description: 'Second pair of eyes on code.', iconName: 'Code' },
-  { id: '23', category: 'Tech', title: 'OBS Setup', description: 'Look better on your next stream.', iconName: 'Video' },
-  { id: '24', category: 'Tech', title: 'Cybersecurity Audit', description: 'Check your password hygiene.', iconName: 'Lock' },
-  { id: '25', category: 'Tech', title: 'AI Prompt Engineering', description: 'Refine your LLM prompts.', iconName: 'Cpu' },
-  { id: '26', category: 'Tech', title: 'Canva Quick Design', description: 'Make a flyer in 25 mins.', iconName: 'Image' },
-  { id: '27', category: 'Tech', title: 'Home WiFi Optimization', description: 'Tips to boost your signal.', iconName: 'Wifi' },
-  { id: '28', category: 'Tech', title: 'Smart Home Setup', description: 'Connect your lights/assistant.', iconName: 'Home' },
-  { id: '29', category: 'Tech', title: 'Crypto Wallet Basics', description: 'Safe setup walkthrough.', iconName: 'Bitcoin' },
-  { id: '30', category: 'Tech', title: 'Photo Editing Basics', description: 'Quick Lightroom/phone tips.', iconName: 'Camera' },
+  // 🧩 LIGHT TECH HELP (18-22)
+  { id: '18', category: 'Light Tech Help', title: 'Phone Cleanup Party', description: 'Organize apps/files — quick, painless.', iconName: 'Smartphone' },
+  { id: '19', category: 'Light Tech Help', title: 'Email Clean Sweep', description: 'Sort your inbox fast, make folders + rules.', iconName: 'Mail' },
+  { id: '20', category: 'Light Tech Help', title: 'AI Prompt Help', description: 'Learn how to get better results with ANY AI.', iconName: 'MessageCircle' },
+  { id: '21', category: 'Light Tech Help', title: 'Quick Website Review', description: 'I give feedback on your site (simple + friendly).', iconName: 'Globe' },
+  { id: '22', category: 'Light Tech Help', title: 'Basic Canva Assist', description: 'Make a flyer, post, or banner together.', iconName: 'Layout' },
 
-  // Lifestyle & Fun
-  { id: '31', category: 'Lifestyle', title: 'Outfit Check', description: 'Stylist opinion on your look.', iconName: 'Shirt' },
-  { id: '32', category: 'Lifestyle', title: 'Quick Tarot Reading', description: '3-card spread for the day.', iconName: 'Star' },
-  { id: '33', category: 'Lifestyle', title: 'Dream Interpretation', description: 'Analyze last night\'s dream.', iconName: 'CloudMoon' },
-  { id: '34', category: 'Lifestyle', title: 'Pet Training Tip', description: 'Solve one specific behavior.', iconName: 'Dog' },
-  { id: '35', category: 'Lifestyle', title: 'Plant Doctor', description: 'Show us your dying plant.', iconName: 'Leaf' },
-  { id: '36', category: 'Lifestyle', title: 'Gift Ideation', description: 'Find the perfect present.', iconName: 'Gift' },
-  { id: '37', category: 'Lifestyle', title: 'Travel Itinerary', description: 'Plan a day in a new city.', iconName: 'Map' },
-  { id: '38', category: 'Lifestyle', title: 'Book Recommendation', description: 'Curated list based on taste.', iconName: 'Book' },
-  { id: '39', category: 'Lifestyle', title: 'Playlist Curation', description: 'Build a vibe for your event.', iconName: 'Music' },
-  { id: '40', category: 'Lifestyle', title: 'Joke Workshop', description: 'Improve your stand-up bit.', iconName: 'Mic' },
+  // 👔 STYLE + SOCIAL (23-27)
+  { id: '23', category: 'Style + Social', title: 'Outfit Advice', description: 'Pick an outfit for a date, meeting, event.', iconName: 'Shirt' },
+  { id: '24', category: 'Style + Social', title: 'Vibe Makeover', description: 'Pick a color palette that fits your look.', iconName: 'Paintbrush' },
+  { id: '25', category: 'Style + Social', title: 'Room Style Rating (Friendly)', description: 'Fast décor suggestions.', iconName: 'Home' },
+  { id: '26', category: 'Style + Social', title: 'Profile Picture Selection', description: 'Choose your best photo for socials.', iconName: 'Camera' },
+  { id: '27', category: 'Style + Social', title: 'Kind Fashion Roast', description: 'Fun, gentle feedback with humor.', iconName: 'Smile' },
 
-  // Miscellaneous
-  { id: '41', category: 'Misc', title: 'Vent Session', description: 'Just someone to listen.', iconName: 'Ear' },
-  { id: '42', category: 'Misc', title: 'Decision Maker', description: 'Help making a tough choice.', iconName: 'Shuffle' },
-  { id: '43', category: 'Misc', title: 'Language Practice', description: '25 mins of Spanish/French.', iconName: 'Globe' },
-  { id: '44', category: 'Misc', title: 'Mock Interview', description: 'Practice one tough question.', iconName: 'Briefcase' },
-  { id: '45', category: 'Misc', title: 'Recipe Rescue', description: 'What to cook with your fridge.', iconName: 'Utensils' },
-  { id: '46', category: 'Misc', title: 'Fantasy Sports Lineup', description: 'Set your team for the week.', iconName: 'Trophy' },
-  { id: '47', category: 'Misc', title: 'Gaming Co-Pilot', description: 'Help with a boss fight.', iconName: 'Gamepad' },
-  { id: '48', category: 'Misc', title: 'Virtual Coffee', description: 'Casual chat with a stranger.', iconName: 'Coffee' },
-  { id: '49', category: 'Misc', title: 'News Briefing', description: 'Catch up on specific topics.', iconName: 'Newspaper' },
-  { id: '50', category: 'Misc', title: 'Mystery Session', description: 'We pick something for you.', iconName: 'HelpCircle' },
+  // 🎤 PUBLIC SPEAKING + CONFIDENCE (28-31)
+  { id: '28', category: 'Public Speaking + Confidence', title: 'Public Speaking Tune-Up', description: 'Fix filler words + boost clarity.', iconName: 'Mic' },
+  { id: '29', category: 'Public Speaking + Confidence', title: 'Mini Speech Practice', description: 'Perfect a short intro or message.', iconName: 'Volume2' },
+  { id: '30', category: 'Public Speaking + Confidence', title: 'Voice Confidence Session', description: 'Warm-ups + speaking tips (none medical).', iconName: 'Radio' },
+  { id: '31', category: 'Public Speaking + Confidence', title: 'First Impression Tips', description: 'Fun, safe social confidence boosts.', iconName: 'Star' },
+
+  // 🏡 HOME & LIFESTYLE (32-36)
+  { id: '32', category: 'Home & Lifestyle', title: 'Small Task Game Plan', description: 'Pick 1 home task and get a quick plan.', iconName: 'CheckSquare' },
+  { id: '33', category: 'Home & Lifestyle', title: 'Pantry Refresh Ideas', description: 'Organize food in 10 mins.', iconName: 'Apple' },
+  { id: '34', category: 'Home & Lifestyle', title: 'Home Office Quick Upgrade', description: 'Fast suggestions using what you already have.', iconName: 'Briefcase' },
+  { id: '35', category: 'Home & Lifestyle', title: 'Fridge Organization Tips', description: 'Simple, family-friendly ideas.', iconName: 'Box' },
+  { id: '36', category: 'Home & Lifestyle', title: 'Garage Declutter Strategy', description: 'One small section to start.', iconName: 'Trash2' },
+
+  // 🎉 JUST FUN + SOCIAL (37-46)
+  { id: '37', category: 'Just Fun + Social', title: 'Desert-Themed Trivia', description: 'Local restaurants, streets, history, celebrities.', iconName: 'Compass' },
+  { id: '38', category: 'Just Fun + Social', title: 'Neighborhood Guessing Game', description: 'Guess which Ahwatukee area (The Foothills, etc.)', iconName: 'MapPin' },
+  { id: '39', category: 'Just Fun + Social', title: 'Emoji Life Story', description: 'Tell your story using only emojis.', iconName: 'Smile' },
+  { id: '40', category: 'Just Fun + Social', title: 'Guess My Favorite Things', description: 'Fun question round.', iconName: 'HelpCircle' },
+  { id: '41', category: 'Just Fun + Social', title: 'Random Wheel of Topics', description: 'Spin → random fun conversation.', iconName: 'RotateCw' },
+  { id: '42', category: 'Just Fun + Social', title: 'Yes or No Speed Round', description: 'Rapid-fire choices.', iconName: 'Zap' },
+  { id: '43', category: 'Just Fun + Social', title: 'Would You Rather: Arizona Edition', description: 'Funny, harmless local scenarios.', iconName: 'GitBranch' },
+  { id: '44', category: 'Just Fun + Social', title: 'Pet Show & Tell', description: 'Introduce your pets — chaos included.', iconName: 'Dog' },
+  { id: '45', category: 'Just Fun + Social', title: 'Funny Story Swap', description: 'Share hilarious fails.', iconName: 'Laugh' },
+  { id: '46', category: 'Just Fun + Social', title: 'Room Zoom Challenge', description: 'Find one weird item in your room.', iconName: 'Search' },
+
+  // 🎧 MUSIC & ENTERTAINMENT (47-49)
+  { id: '47', category: 'Music & Entertainment', title: 'Mini Roast (Nice Only)', description: 'Jokes about your hobbies + interests (friendly).', iconName: 'Laugh' },
+  { id: '48', category: 'Music & Entertainment', title: 'Your Life as a Movie', description: 'We build your movie title + poster concept.', iconName: 'Film' },
+  { id: '49', category: 'Music & Entertainment', title: 'Mini Smart Home Tips', description: 'Basic, easy boosts (no survival, no repairs).', iconName: 'Zap' },
+
+  // 💳 LIGHT BUSINESS + CREDIT (50)
+  { id: '50', category: 'Mystery Pick', title: 'Mystery Session', description: 'We pick something fun for you. Stay surprised!', iconName: 'HelpCircle' },
 ];
 
 export const CATEGORIES = Array.from(new Set(SERVICES_LIST.map(s => s.category)));

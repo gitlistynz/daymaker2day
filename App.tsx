@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { AppView, ServiceItem, BookingDetails, UserProfileData } from './types';
+import { AppView, ServiceItem, BookingDetails, UserProfileData, BookingType, GiftDeliveryMethod } from './types';
 import { MenuGrid } from './components/MenuGrid';
+import { SessionDetail } from './components/SessionDetail';
+import { BookOrGift } from './components/BookOrGift';
 import { BookingCalendar } from './components/BookingCalendar';
+import { Payment } from './components/Payment';
+import { GiftDelivery } from './components/GiftDelivery';
 import { UserProfile } from './components/UserProfile';
 import { AIChat } from './components/AIChat';
 import { format } from 'date-fns';
-import { CheckCircle, ArrowLeft, Terminal, User } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
