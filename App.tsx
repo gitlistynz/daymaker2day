@@ -8,11 +8,14 @@ import { Payment } from './components/Payment';
 import { GiftDelivery } from './components/GiftDelivery';
 import { UserProfile } from './components/UserProfile';
 import { AIChat } from './components/AIChat';
+import { AdminPortal } from './components/AdminPortal';
 import { format } from 'date-fns';
-import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon, Settings } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
   const [booking, setBooking] = useState<BookingDetails>({
     serviceId: null,
     date: null,
@@ -91,14 +94,54 @@ const App: React.FC = () => {
             
             <button
                 onClick={() => setCurrentView(AppView.PROFILE)}
-                className={`p-2 rounded-full border transition-all duration-300 ${
-                    currentView === AppView.PROFILE
-                    ? 'bg-neon-blue/20 border-neon-blue text-neon-blue shadow-[0_0_10px_rgba(0,243,255,0.4)]'
-                    : 'bg-white/5 border-white/10 text-gray-400 hover:text-white hover:border-white/30'
-                }`}
+                className="p-2 rounded-full border transition-all duration-300 bg-white/5 border-white/10 hover:border-neon-blue/50"
             >
-                <User size={20} />
+                <User size={20} className="text-neon-blue" />
             </button>
+
+            {/* Settings Gear Button */}
+            <div className="relative">
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="p-2 rounded-full border transition-all duration-300 bg-white/5 border-white/10 hover:border-neon-blue/50"
+              >
+                <Settings size={20} className="text-neon-blue" />
+              </button>
+
+              {/* Settings Dropdown */}
+              {showSettings && (
+                <div className="absolute top-12 right-0 bg-gray-900 border border-gray-700 rounded-lg shadow-xl overflow-hidden z-50 min-w-[200px]">
+                  <button
+                    onClick={() => { setShowSettings(false); }}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left"
+                  >
+                    <span className="text-blue-400">💰</span>
+                    <span>Plans & Pricing</span>
+                  </button>
+                  <button
+                    onClick={() => { setShowSettings(false); }}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left border-t border-gray-700"
+                  >
+                    <span className="text-green-400">📋</span>
+                    <span>Terms of Use</span>
+                  </button>
+                  <button
+                    onClick={() => { setShowSettings(false); }}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left border-t border-gray-700"
+                  >
+                    <span className="text-purple-400">🔒</span>
+                    <span>Privacy Policy</span>
+                  </button>
+                  <button
+                    onClick={() => { setShowSettings(false); setShowAdmin(true); }}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-red-900/30 transition-colors text-left border-t border-gray-700"
+                  >
+                    <span className="text-red-400">🔐</span>
+                    <span className="font-semibold">Admin Portal</span>
+                  </button>
+                </div>
+              )}
+            </div>
         </div>
       </nav>
 
@@ -239,6 +282,9 @@ const App: React.FC = () => {
 
       {/* AI Assistant */}
       <AIChat />
+
+      {/* Admin Portal */}
+      {showAdmin && <AdminPortal onClose={() => setShowAdmin(false)} />}
 
       <footer className="relative z-10 py-8 text-center text-gray-600 text-sm font-mono mt-auto border-t border-white/5">
         <p>DAYMAKER2DAY SYSTEM © 2024 // STATUS: OPTIMAL</p>
