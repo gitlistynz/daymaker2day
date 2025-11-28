@@ -1,0 +1,26 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#1a1a2e" stroke="#b8860b" stroke-width="3"/>
+  
+  <!-- Checkmark -->
+  <g stroke="#d4a574" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 60 100 L 85 125 L 140 70" transform="translate(20, 20)"/>
+  </g>
+  
+  <!-- Maple Leaf -->
+  <g fill="#cd853f" opacity="0.95">
+    <!-- Center stem -->
+    <line x1="100" y1="120" x2="100" y2="70" stroke="#cd853f" stroke-width="3"/>
+    
+    <!-- Main leaf points -->
+    <polygon points="100,70 95,85 85,80 90,95 75,95 90,105 85,120 100,110 115,120 110,105 125,95 110,95 115,85 105,80"/>
+    
+    <!-- Leaf veins -->
+    <line x1="100" y1="70" x2="85" y2="80" stroke="#a0522d" stroke-width="1.5"/>
+    <line x1="100" y1="70" x2="115" y2="80" stroke="#a0522d" stroke-width="1.5"/>
+    <line x1="100" y1="85" x2="75" y2="95" stroke="#a0522d" stroke-width="1.5"/>
+    <line x1="100" y1="85" x2="125" y2="95" stroke="#a0522d" stroke-width="1.5"/>
+    <line x1="100" y1="100" x2="85" y2="120" stroke="#a0522d" stroke-width="1.5"/>
+    <line x1="100" y1="100" x2="115" y2="120" stroke="#a0522d" stroke-width="1.5"/>
+  </g>
+</svg>
