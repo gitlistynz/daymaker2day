@@ -4,10 +4,10 @@ import { CATEGORIES, SERVICES_LIST } from '../constants';
 import * as Icons from 'lucide-react';
 
 interface MenuGridProps {
-  onSelect: (service: ServiceItem) => void;
+  onSelectService: (service: ServiceItem) => void;
 }
 
-export const MenuGrid: React.FC<MenuGridProps> = ({ onSelect }) => {
+export const MenuGrid: React.FC<MenuGridProps> = ({ onSelectService }) => {
   const [filter, setFilter] = useState<string>('All');
   const [search, setSearch] = useState('');
 
@@ -70,7 +70,7 @@ export const MenuGrid: React.FC<MenuGridProps> = ({ onSelect }) => {
           return (
             <div 
               key={service.id}
-              onClick={() => onSelect(service)}
+              onClick={() => onSelectService(service)}
               className="group relative overflow-hidden glass-panel rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-neon-purple/50"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-neon-blue/5 to-neon-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

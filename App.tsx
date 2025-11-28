@@ -8,15 +8,11 @@ import { Payment } from './components/Payment';
 import { GiftDelivery } from './components/GiftDelivery';
 import { UserProfile } from './components/UserProfile';
 import { AIChat } from './components/AIChat';
-import { SettingsMenu } from './components/SettingsMenu';
-import { AdminDashboard } from './components/AdminDashboard';
-import { SeasonalDisplay } from './components/SeasonalDisplay';
 import { format } from 'date-fns';
 import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
-  const [showAdmin, setShowAdmin] = useState(false);
   const [booking, setBooking] = useState<BookingDetails>({
     serviceId: null,
     date: null,
@@ -93,8 +89,6 @@ const App: React.FC = () => {
                  </button>
             )}
             
-            <SettingsMenu onAdminClick={() => setShowAdmin(true)} />
-            
             <button
                 onClick={() => setCurrentView(AppView.PROFILE)}
                 className={`p-2 rounded-full border transition-all duration-300 ${
@@ -130,11 +124,6 @@ const App: React.FC = () => {
               INITIATE BOOKING
               <div className="absolute inset-0 border border-white rounded-lg scale-105 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 pointer-events-none" />
             </button>
-
-            {/* Seasonal Display */}
-            <div className="mt-12">
-              <SeasonalDisplay showOnHome={true} />
-            </div>
             
             <div className="mt-16 grid grid-cols-3 gap-8 text-center text-gray-500 font-mono text-sm">
                 <div>
@@ -247,9 +236,6 @@ const App: React.FC = () => {
         )}
 
       </main>
-
-      {/* Admin Dashboard Modal */}
-      {showAdmin && <AdminDashboard onClose={() => setShowAdmin(false)} />}
 
       {/* AI Assistant */}
       <AIChat />
