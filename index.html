@@ -4,80 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>daymaker2day</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              orbitron: ['Orbitron', 'sans-serif'],
-            },
-            colors: {
-              neon: {
-                blue: '#00f3ff',
-                purple: '#bc13fe',
-                green: '#0aff0a'
-              },
-              glass: {
-                100: 'rgba(255, 255, 255, 0.1)',
-                200: 'rgba(255, 255, 255, 0.2)',
-                300: 'rgba(255, 255, 255, 0.3)',
-              }
-            },
-            animation: {
-              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'float': 'float 6s ease-in-out infinite',
-              'fadeIn': 'fadeIn 0.5s ease-out',
-            },
-            keyframes: {
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
-              },
-              fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              }
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        background-color: #050505;
-        color: #e0e0e0;
-        overflow-x: hidden;
-      }
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0f0f13;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #00f3ff;
-      }
-      .glass-panel {
-        background: rgba(20, 20, 30, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-      .animate-fadeIn {
-        animation: fadeIn 0.5s ease-out;
-      }
-      @keyframes fadeIn {
-        0% { opacity: 0; transform: translateY(10px); }
-        100% { opacity: 1; transform: translateY(0); }
-      }
-    </style>
   </head>
   <body>
     <div id="root"></div>

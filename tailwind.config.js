@@ -12,6 +12,9 @@ export default {
         orbitron: ['Orbitron', 'sans-serif'],
       },
       colors: {
+        'neon-blue': '#00f3ff',
+        'neon-purple': '#bc13fe',
+        'neon-green': '#0aff0a',
         neon: {
           blue: '#00f3ff',
           purple: '#bc13fe',
@@ -26,11 +29,16 @@ export default {
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
+        'fadeIn': 'fadeIn 0.5s ease-out',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         }
       }
     }
