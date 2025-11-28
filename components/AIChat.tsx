@@ -7,7 +7,7 @@ export const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: 'init', role: 'model', text: 'Greetings. I am the DayMaker AI. Tell me how you are feeling, and I will recommend a session.' }
+    { id: 'init', role: 'model', text: 'Greetings! I\'m your DayMaker Concierge. Tell me how you\'re feeling, and I\'ll recommend the perfect session for you.' }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -58,7 +58,7 @@ export const AIChat: React.FC = () => {
           <div className="p-4 bg-black/40 flex justify-between items-center border-b border-white/10">
             <div className="flex items-center gap-2">
               <Bot className="text-neon-blue" size={20} />
-              <span className="font-orbitron text-sm tracking-wider text-white">AI CONCIERGE</span>
+              <span className="font-orbitron text-sm tracking-wider text-white">CONCIERGE</span>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition-colors">
               <X size={20} />

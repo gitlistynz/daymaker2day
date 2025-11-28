@@ -280,7 +280,7 @@ const App: React.FC = () => {
 
       </main>
 
-      {/* AI Assistant */}
+      {/* Smart Concierge */}
       <AIChat />
 
       {/* Admin Portal */}
