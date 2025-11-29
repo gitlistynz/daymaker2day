@@ -3,18 +3,18 @@ import { ServiceItem } from './types';
 // 50 FUN + SIMPLE 25-MIN ZOOM SESSIONS
 export const SERVICES_LIST: ServiceItem[] = [
   // 🔥 CREATIVE FUN (1-12)
-  { id: '1', category: 'Creative Fun', title: 'Logo Remix', description: 'You describe a vibe → I use my expert tools to generate 5 logo concepts live.', iconName: 'Palette' },
-  { id: '2', category: 'Creative Fun', title: 'Rap/Song Maker', description: 'We create a funny or sentimental song for someone using cutting-edge tools.', iconName: 'Music' },
+  { id: '1', category: 'Creative Fun', title: 'Logo Design Session', description: 'You describe a vibe → I help you create 5 logo concepts live.', iconName: 'Palette' },
+  { id: '2', category: 'Creative Fun', title: 'Rap/Song Maker', description: 'We create a funny or sentimental song together for someone special.', iconName: 'Music' },
   { id: '3', category: 'Creative Fun', title: 'Family Song Session', description: 'Make a custom family theme song together.', iconName: 'Users' },
-  { id: '4', category: 'Creative Fun', title: 'Photo Glow-Up', description: 'I use my advanced editing expertise to upgrade one selfie or pet photo together.', iconName: 'Image' },
-  { id: '5', category: 'Creative Fun', title: 'Brand Name Generator', description: 'Live brainstorm + professionally generated names using my expert tools.', iconName: 'Lightbulb' },
-  { id: '6', category: 'Creative Fun', title: 'Gift Creator', description: 'Design a digital gift (poster, card, avatar) with my creative expertise.', iconName: 'Gift' },
-  { id: '7', category: 'Creative Fun', title: 'Pet Portrait', description: 'I transform your pet into a knight, queen, or superhero using my design skills.', iconName: 'Dog' },
-  { id: '8', category: 'Creative Fun', title: 'Poster Party', description: 'Make a mini movie poster of YOU with my creative tools.', iconName: 'Film' },
-  { id: '9', category: 'Creative Fun', title: 'Superhero Version of You', description: 'Create a character with powers and backstory using my design expertise.', iconName: 'Zap' },
-  { id: '10', category: 'Creative Fun', title: 'Cartoon Avatar', description: 'I turn yourself into a cartoon using professional techniques.', iconName: 'Smile' },
-  { id: '11', category: 'Creative Fun', title: 'Custom Playlist Builder', description: 'Pick your mood → we build a playlist.', iconName: 'Volume2' },
-  { id: '12', category: 'Creative Fun', title: 'Story-to-Song Session', description: 'Tell me a story → I turn it into a rhyme.', iconName: 'Mic' },
+  { id: '4', category: 'Creative Fun', title: 'Photo Glow-Up', description: 'I help you upgrade one selfie or pet photo together.', iconName: 'Image' },
+  { id: '5', category: 'Creative Fun', title: 'Brand Name Generator', description: 'Live brainstorm — I help you come up with the perfect name.', iconName: 'Lightbulb' },
+  { id: '6', category: 'Creative Fun', title: 'Gift Creator', description: 'I help you design a digital gift (poster, card, avatar).', iconName: 'Gift' },
+  { id: '7', category: 'Creative Fun', title: 'Pet Portrait', description: 'I help transform your pet into a knight, queen, or superhero.', iconName: 'Dog' },
+  { id: '8', category: 'Creative Fun', title: 'Poster Party', description: 'I help you make a mini movie poster of YOU.', iconName: 'Film' },
+  { id: '9', category: 'Creative Fun', title: 'Superhero Version of You', description: 'I help you create a character with powers and backstory.', iconName: 'Zap' },
+  { id: '10', category: 'Creative Fun', title: 'Cartoon Avatar', description: 'I help turn you into a cartoon character.', iconName: 'Smile' },
+  { id: '11', category: 'Creative Fun', title: 'Custom Playlist Builder', description: 'Pick your mood → we build a playlist together.', iconName: 'Volume2' },
+  { id: '12', category: 'Creative Fun', title: 'Story-to-Song Session', description: 'Tell me a story → I help turn it into a rhyme.', iconName: 'Mic' },
 
   // 💡 IDEA DEVELOPMENT (13-17)
   { id: '13', category: 'Idea Development', title: 'Small Business Starter Spark', description: 'Light brainstorming for a new side hustle.', iconName: 'Briefcase' },
@@ -26,7 +26,7 @@ export const SERVICES_LIST: ServiceItem[] = [
   // 🧩 LIGHT TECH HELP (18-22)
   { id: '18', category: 'Light Tech Help', title: 'Phone Cleanup Party', description: 'Organize apps/files — quick, painless.', iconName: 'Smartphone' },
   { id: '19', category: 'Light Tech Help', title: 'Email Clean Sweep', description: 'Sort your inbox fast, make folders + rules.', iconName: 'Mail' },
-  { id: '20', category: 'Light Tech Help', title: 'Prompt Mastery Help', description: 'Learn my expert techniques to get better results with any tool.', iconName: 'MessageCircle' },
+  { id: '20', category: 'Light Tech Help', title: 'Tech Tool Tips', description: 'I show you how to use the latest tools in simple, easy steps.', iconName: 'MessageCircle' },
   { id: '21', category: 'Light Tech Help', title: 'Quick Website Review', description: 'I give feedback on your site (simple + friendly).', iconName: 'Globe' },
   { id: '22', category: 'Light Tech Help', title: 'Basic Canva Assist', description: 'Make a flyer, post, or banner together.', iconName: 'Layout' },
 
