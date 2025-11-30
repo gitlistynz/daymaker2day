@@ -4,7 +4,7 @@ import { ServiceItem } from './types';
 export const SERVICES_LIST: ServiceItem[] = [
   // 🔥 CREATIVE FUN (1-12)
   { id: '1', category: 'Creative Fun', title: 'Logo Design Session', description: 'You describe a vibe → I help you create 5 logo concepts live.', iconName: 'Palette' },
-  { id: '2', category: 'Creative Fun', title: 'Rap/Song Maker', description: 'We create a funny or sentimental song together for someone special.', iconName: 'Music' },
+  { id: '2', category: 'Creative Fun', title: 'Let\'s Create Some Music', description: 'Music producing made easy — become your own star! All genres, all subjects, all ideas welcome.', iconName: 'Music' },
   { id: '3', category: 'Creative Fun', title: 'Family Song Session', description: 'Make a custom family theme song together.', iconName: 'Users' },
   { id: '4', category: 'Creative Fun', title: 'Photo Glow-Up', description: 'I help you upgrade one selfie or pet photo together.', iconName: 'Image' },
   { id: '5', category: 'Creative Fun', title: 'Brand Name Generator', description: 'Live brainstorm — I help you come up with the perfect name.', iconName: 'Lightbulb' },
