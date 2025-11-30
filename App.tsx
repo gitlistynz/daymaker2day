@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppView, ServiceItem, BookingDetails, UserProfileData, BookingType, GiftDeliveryMethod } from './types';
 import { MenuGrid } from './components/MenuGrid';
 import { SessionDetail } from './components/SessionDetail';
@@ -9,13 +9,29 @@ import { GiftDelivery } from './components/GiftDelivery';
 import { UserProfile } from './components/UserProfile';
 import { AIChat } from './components/AIChat';
 import { AdminPortal } from './components/AdminPortal';
+import { LiveSession } from './components/LiveSession';
+import { SERVICES_LIST } from './constants';
 import { format } from 'date-fns';
-import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon, Settings } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon, Settings, Radio } from 'lucide-react';
+
+// Type for scheduled sessions
+interface ScheduledSession {
+  id: string;
+  serviceId: string;
+  serviceTitle: string;
+  date: Date;
+  timeSlot: string;
+  hostName: string;
+  hostImage: string;
+}
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
   const [showSettings, setShowSettings] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
+  const [showLiveSession, setShowLiveSession] = useState(false);
+  const [activeSession, setActiveSession] = useState<ScheduledSession | null>(null);
+  const [scheduledSessions, setScheduledSessions] = useState<ScheduledSession[]>([]);
   const [booking, setBooking] = useState<BookingDetails>({
     serviceId: null,
     date: null,
@@ -32,6 +48,45 @@ const App: React.FC = () => {
     bio: 'Focusing on productivity and mental clarity.'
   });
 
+  // Check for active sessions every minute
+  useEffect(() => {
+    const checkForActiveSession = () => {
+      const now = new Date();
+      
+      // Find a session that's happening now (within the session window)
+      const active = scheduledSessions.find(session => {
+        const sessionDate = new Date(session.date);
+        const [time, period] = session.timeSlot.split(' ');
+        const [hours, minutes] = time.split(':').map(Number);
+        let hour24 = hours;
+        if (period === 'PM' && hours !== 12) hour24 += 12;
+        if (period === 'AM' && hours === 12) hour24 = 0;
+        
+        sessionDate.setHours(hour24, minutes, 0, 0);
+        
+        // Get service to check duration
+        const service = SERVICES_LIST.find(s => s.id === session.serviceId);
+        const duration = service?.classType === 'full' ? 55 : 25;
+        
+        const sessionEnd = new Date(sessionDate.getTime() + duration * 60 * 1000);
+        
+        // Session is active if current time is within session window
+        // Start showing 2 minutes early so they can join
+        const sessionStart = new Date(sessionDate.getTime() - 2 * 60 * 1000);
+        
+        return now >= sessionStart && now <= sessionEnd;
+      });
+      
+      setActiveSession(active || null);
+    };
+
+    // Check immediately and then every 30 seconds
+    checkForActiveSession();
+    const interval = setInterval(checkForActiveSession, 30000);
+    
+    return () => clearInterval(interval);
+  }, [scheduledSessions]);
+
   const handleServiceSelect = (service: ServiceItem) => {
     setSelectedServiceData(service);
     setBooking(prev => ({ ...prev, serviceId: service.id }));
@@ -45,9 +100,23 @@ const App: React.FC = () => {
 
   const handleFinalizeBooking = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with a backend API
-    alert(`Booking Confirmed for ${booking.userName}! Check your email.`);
-    // Reset or redirect
+    
+    // Create the scheduled session
+    if (selectedServiceData && booking.date && booking.timeSlot) {
+      const newSession: ScheduledSession = {
+        id: Date.now().toString(),
+        serviceId: selectedServiceData.id,
+        serviceTitle: selectedServiceData.title,
+        date: booking.date,
+        timeSlot: booking.timeSlot,
+        hostName: 'DayMaker',
+        hostImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+      };
+      
+      setScheduledSessions(prev => [...prev, newSession]);
+    }
+    
+    alert(`Booking Confirmed for ${booking.userName}! Check your email. You'll see a "Join Session" button when it's time.`);
     setCurrentView(AppView.HOME);
     setBooking({ serviceId: null, date: null, timeSlot: null, userEmail: '', userName: '' });
   };
@@ -111,6 +180,18 @@ const App: React.FC = () => {
               {/* Settings Dropdown */}
               {showSettings && (
                 <div className="absolute top-12 right-0 bg-gray-900 border border-gray-700 rounded-lg shadow-xl overflow-hidden z-50 min-w-[200px]">
+                  {/* Show upcoming sessions if any */}
+                  {scheduledSessions.length > 0 && (
+                    <div className="px-4 py-3 border-b border-gray-700 bg-white/5">
+                      <div className="text-xs text-gray-400 mb-2">UPCOMING SESSIONS</div>
+                      {scheduledSessions.slice(0, 2).map(session => (
+                        <div key={session.id} className="flex items-center gap-2 text-sm text-white mb-1">
+                          <span className="w-2 h-2 bg-neon-blue rounded-full"></span>
+                          <span className="truncate">{session.serviceTitle}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   <button
                     onClick={() => { setShowSettings(false); }}
                     className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left"
@@ -280,11 +361,64 @@ const App: React.FC = () => {
 
       </main>
 
+      {/* Floating Join Live Session Button - ONLY shows when there's an active scheduled session */}
+      {activeSession && (
+        <div className="fixed bottom-24 right-6 z-40 animate-fadeIn">
+          {/* Pulsing ring effect */}
+          <div className="absolute inset-0 rounded-full bg-neon-green/30 animate-ping"></div>
+          
+          <button
+            onClick={() => setShowLiveSession(true)}
+            className="relative flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-neon-green to-emerald-500 text-black font-bold rounded-full shadow-[0_0_30px_rgba(0,255,136,0.4)] hover:shadow-[0_0_40px_rgba(0,255,136,0.6)] transition-all group"
+          >
+            {/* Host Profile Image */}
+            <div className="relative">
+              <img 
+                src={activeSession.hostImage} 
+                alt={activeSession.hostName}
+                className="w-10 h-10 rounded-full border-2 border-black object-cover"
+              />
+              <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-white border-2 border-neon-green"></span>
+              </span>
+            </div>
+            
+            <div className="text-left">
+              <div className="text-xs opacity-70">Session Ready</div>
+              <div className="font-bold">Join Now</div>
+            </div>
+            
+            <Radio size={20} className="animate-pulse" />
+          </button>
+          
+          {/* Session info tooltip */}
+          <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-black/90 rounded-lg text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+            {activeSession.serviceTitle}
+          </div>
+        </div>
+      )}
+
       {/* Smart Concierge */}
       <AIChat />
 
       {/* Admin Portal */}
       {showAdmin && <AdminPortal onClose={() => setShowAdmin(false)} />}
+
+      {/* Live Session */}
+      {showLiveSession && activeSession && (
+        <LiveSession 
+          hostName={activeSession.hostName}
+          hostImage={activeSession.hostImage}
+          sessionTitle={activeSession.serviceTitle}
+          onEndSession={() => {
+            setShowLiveSession(false);
+            // Remove the session from scheduled sessions after ending
+            setScheduledSessions(prev => prev.filter(s => s.id !== activeSession.id));
+            setActiveSession(null);
+          }}
+        />
+      )}
 
       <footer className="relative z-10 py-8 text-center text-gray-600 text-sm font-mono mt-auto border-t border-white/5">
         <p>DAYMAKER2DAY SYSTEM © 2024 // STATUS: OPTIMAL</p>

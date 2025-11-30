@@ -1,9 +1,12 @@
+export type ClassType = 'half' | 'full';
+
 export interface ServiceItem {
   id: string;
   category: string;
   title: string;
   description: string;
   iconName: string; // Mapping to Lucide icons conceptually
+  classType: ClassType; // 'half' = 25 min, 'full' = 55 min
 }
 
 export enum AppView {

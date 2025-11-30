@@ -1,74 +1,84 @@
 import { ServiceItem } from './types';
 
-// 50 FUN + SIMPLE 25-MIN ZOOM SESSIONS
+// 50 ZOOM SESSIONS: 30 Full Class (55 min) + 20 Half Class (25 min)
 export const SERVICES_LIST: ServiceItem[] = [
-  // 🔥 CREATIVE FUN (1-12)
-  { id: '1', category: 'Creative Fun', title: 'Logo Design Session', description: 'You describe a vibe → I help you create 5 logo concepts live.', iconName: 'Palette' },
-  { id: '2', category: 'Creative Fun', title: 'Let\'s Create Some Music', description: 'Music producing made easy — become your own star! All genres, all subjects, all ideas welcome.', iconName: 'Music' },
-  { id: '3', category: 'Creative Fun', title: 'Family Song Session', description: 'Make a custom family theme song together.', iconName: 'Users' },
-  { id: '4', category: 'Creative Fun', title: 'Photo Glow-Up', description: 'I help you upgrade one selfie or pet photo together.', iconName: 'Image' },
-  { id: '5', category: 'Creative Fun', title: 'Brand Name Generator', description: 'Live brainstorm — I help you come up with the perfect name.', iconName: 'Lightbulb' },
-  { id: '6', category: 'Creative Fun', title: 'Gift Creator', description: 'I help you design a digital gift (poster, card, avatar).', iconName: 'Gift' },
-  { id: '7', category: 'Creative Fun', title: 'Pet Portrait', description: 'I help transform your pet into a knight, queen, or superhero.', iconName: 'Dog' },
-  { id: '8', category: 'Creative Fun', title: 'Poster Party', description: 'I help you make a mini movie poster of YOU.', iconName: 'Film' },
-  { id: '9', category: 'Creative Fun', title: 'Superhero Version of You', description: 'I help you create a character with powers and backstory.', iconName: 'Zap' },
-  { id: '10', category: 'Creative Fun', title: 'Cartoon Avatar', description: 'I help turn you into a cartoon character.', iconName: 'Smile' },
-  { id: '11', category: 'Creative Fun', title: 'Custom Playlist Builder', description: 'Pick your mood → we build a playlist together.', iconName: 'Volume2' },
-  { id: '12', category: 'Creative Fun', title: 'Story-to-Song Session', description: 'Tell me a story → I help turn it into a rhyme.', iconName: 'Mic' },
+  // ============ FULL CLASS (55 MIN) - $49 - DEEP DIVE SESSIONS ============
+  
+  // Creative & Design
+  { id: 'fc1', category: 'Creative & Design', title: 'Logo Design Workshop', description: 'From concept to 5 polished logo options — walk away with files you can use.', iconName: 'Palette', classType: 'full' },
+  { id: 'fc2', category: 'Creative & Design', title: 'Music Production Session', description: 'Create a complete beat or song together — any genre, your vision, professional guidance.', iconName: 'Music', classType: 'full' },
+  { id: 'fc3', category: 'Creative & Design', title: 'Brand Identity Package', description: 'Colors, fonts, logo concepts, and mood board — complete brand foundation.', iconName: 'Layers', classType: 'full' },
+  { id: 'fc4', category: 'Creative & Design', title: 'Photo Editing Mastery', description: 'Transform up to 10 photos with professional retouching and learn the techniques.', iconName: 'Image', classType: 'full' },
+  { id: 'fc5', category: 'Creative & Design', title: 'Video Content Creation', description: 'Plan, shoot tips, and edit a video for TikTok, Reels, or YouTube together.', iconName: 'Video', classType: 'full' },
+  
+  // Tech & Digital
+  { id: 'fc6', category: 'Tech & Digital', title: 'Website Setup Complete', description: 'Build a simple website from scratch — domain, design, and launch-ready.', iconName: 'Globe', classType: 'full' },
+  { id: 'fc7', category: 'Tech & Digital', title: 'Smartphone Power User', description: 'Master every feature of your phone — hidden tricks, organization, and productivity.', iconName: 'Smartphone', classType: 'full' },
+  { id: 'fc8', category: 'Tech & Digital', title: 'Computer Speed & Security', description: 'Full cleanup, speed optimization, and security setup for your PC or Mac.', iconName: 'Monitor', classType: 'full' },
+  { id: 'fc9', category: 'Tech & Digital', title: 'Social Media Strategy', description: 'Complete posting plan, content ideas, and growth strategy for your accounts.', iconName: 'Instagram', classType: 'full' },
+  { id: 'fc10', category: 'Tech & Digital', title: 'Online Safety Masterclass', description: 'Passwords, privacy, scam protection — comprehensive digital safety setup.', iconName: 'Shield', classType: 'full' },
+  
+  // Business & Career
+  { id: 'fc11', category: 'Business & Career', title: 'Side Hustle Launch', description: 'Turn your idea into a real business plan with first steps mapped out.', iconName: 'Rocket', classType: 'full' },
+  { id: 'fc12', category: 'Business & Career', title: 'Freelance Business Setup', description: 'Pricing, contracts, finding clients, and getting paid — complete freelancer toolkit.', iconName: 'Briefcase', classType: 'full' },
+  { id: 'fc13', category: 'Business & Career', title: 'Job Interview Bootcamp', description: 'Practice tough questions, body language, and walk in confident.', iconName: 'UserCheck', classType: 'full' },
+  { id: 'fc14', category: 'Business & Career', title: 'Personal Branding Workshop', description: 'Define your story, refine your message, and stand out professionally.', iconName: 'Award', classType: 'full' },
+  { id: 'fc15', category: 'Business & Career', title: 'Sell Online Workshop', description: 'Set up Etsy, eBay, or marketplace shop — listings, photos, and first sale strategy.', iconName: 'ShoppingBag', classType: 'full' },
+  
+  // Communication & Confidence
+  { id: 'fc16', category: 'Communication', title: 'Public Speaking Intensive', description: 'Structured practice with feedback — eliminate filler words, project confidence.', iconName: 'Mic', classType: 'full' },
+  { id: 'fc17', category: 'Communication', title: 'Presentation Mastery', description: 'Design stunning slides and deliver a presentation that captivates.', iconName: 'Presentation', classType: 'full' },
+  { id: 'fc18', category: 'Communication', title: 'Networking & Connection', description: 'Master introductions, small talk, and building professional relationships.', iconName: 'Users', classType: 'full' },
+  { id: 'fc19', category: 'Communication', title: 'Video Presence Coaching', description: 'Look and sound great on Zoom calls — lighting, audio, and on-camera confidence.', iconName: 'Camera', classType: 'full' },
+  
+  // Lifestyle & Home
+  { id: 'fc20', category: 'Lifestyle', title: 'Home Organization System', description: 'Create lasting systems for any room — declutter and design spaces that work.', iconName: 'Home', classType: 'full' },
+  { id: 'fc21', category: 'Lifestyle', title: 'Meal Planning Complete', description: 'Week of meals, shopping list, prep strategy — eat better with less stress.', iconName: 'ChefHat', classType: 'full' },
+  { id: 'fc22', category: 'Lifestyle', title: 'Budget & Money Blueprint', description: 'Set up a real budget system, track spending, and build money habits.', iconName: 'PiggyBank', classType: 'full' },
+  { id: 'fc23', category: 'Lifestyle', title: 'Wardrobe Makeover', description: 'Find your style, identify what works, build a capsule wardrobe plan.', iconName: 'Shirt', classType: 'full' },
+  { id: 'fc24', category: 'Lifestyle', title: 'Plant Parent Bootcamp', description: 'Choose the right plants for your space and learn care routines that work.', iconName: 'Leaf', classType: 'full' },
+  
+  // Music & Creative Arts
+  { id: 'fc25', category: 'Music & Arts', title: 'Guitar Starter Session', description: 'Learn chords, strumming, and play your first song by the end.', iconName: 'Guitar', classType: 'full' },
+  { id: 'fc26', category: 'Music & Arts', title: 'Singing & Voice Session', description: 'Breathing, pitch, and performance — build real singing confidence.', iconName: 'MicVocal', classType: 'full' },
+  { id: 'fc27', category: 'Music & Arts', title: 'DJ & Mixing Intro', description: 'Learn to mix tracks, create transitions, and understand DJ basics.', iconName: 'Disc', classType: 'full' },
+  
+  // Wellness & Growth
+  { id: 'fc28', category: 'Wellness', title: 'Stress Relief System', description: 'Build a personalized toolkit — breathing, mindfulness, and daily habits.', iconName: 'Heart', classType: 'full' },
+  { id: 'fc29', category: 'Wellness', title: 'Sleep Transformation', description: 'Identify what keeps you up and build a bedtime routine that works.', iconName: 'Moon', classType: 'full' },
+  { id: 'fc30', category: 'Wellness', title: 'Goal Setting & Planning', description: 'Map out your goals with actionable steps and accountability structure.', iconName: 'Target', classType: 'full' },
 
-  // 💡 IDEA DEVELOPMENT (13-17)
-  { id: '13', category: 'Idea Development', title: 'Small Business Starter Spark', description: 'Light brainstorming for a new side hustle.', iconName: 'Briefcase' },
-  { id: '14', category: 'Idea Development', title: 'Product Idea Check', description: 'Talk through a quick idea to see if it\'s solid.', iconName: 'Zap' },
-  { id: '15', category: 'Idea Development', title: 'Brand Personality Builder', description: 'Define the tone/look of your future brand.', iconName: 'Palette' },
-  { id: '16', category: 'Idea Development', title: 'Catchy Slogan Workshop', description: 'Create 3–6 memorable taglines.', iconName: 'Type' },
-  { id: '17', category: 'Idea Development', title: 'Concept Sharpening', description: 'You bring an idea → we make it stronger.', iconName: 'Edit' },
-
-  // 🧩 LIGHT TECH HELP (18-22)
-  { id: '18', category: 'Light Tech Help', title: 'Phone Cleanup Party', description: 'Organize apps/files — quick, painless.', iconName: 'Smartphone' },
-  { id: '19', category: 'Light Tech Help', title: 'Email Clean Sweep', description: 'Sort your inbox fast, make folders + rules.', iconName: 'Mail' },
-  { id: '20', category: 'Light Tech Help', title: 'Tech Tool Tips', description: 'I show you how to use the latest tools in simple, easy steps.', iconName: 'MessageCircle' },
-  { id: '21', category: 'Light Tech Help', title: 'Quick Website Review', description: 'I give feedback on your site (simple + friendly).', iconName: 'Globe' },
-  { id: '22', category: 'Light Tech Help', title: 'Basic Canva Assist', description: 'Make a flyer, post, or banner together.', iconName: 'Layout' },
-
-  // 👔 STYLE + SOCIAL (23-27)
-  { id: '23', category: 'Style + Social', title: 'Outfit Advice', description: 'Pick an outfit for a date, meeting, event.', iconName: 'Shirt' },
-  { id: '24', category: 'Style + Social', title: 'Vibe Makeover', description: 'Pick a color palette that fits your look.', iconName: 'Paintbrush' },
-  { id: '25', category: 'Style + Social', title: 'Room Style Rating (Friendly)', description: 'Fast décor suggestions.', iconName: 'Home' },
-  { id: '26', category: 'Style + Social', title: 'Profile Picture Selection', description: 'Choose your best photo for socials.', iconName: 'Camera' },
-  { id: '27', category: 'Style + Social', title: 'Kind Fashion Roast', description: 'Fun, gentle feedback with humor.', iconName: 'Smile' },
-
-  // 🎤 PUBLIC SPEAKING + CONFIDENCE (28-31)
-  { id: '28', category: 'Public Speaking + Confidence', title: 'Public Speaking Tune-Up', description: 'Fix filler words + boost clarity.', iconName: 'Mic' },
-  { id: '29', category: 'Public Speaking + Confidence', title: 'Mini Speech Practice', description: 'Perfect a short intro or message.', iconName: 'Volume2' },
-  { id: '30', category: 'Public Speaking + Confidence', title: 'Voice Confidence Session', description: 'Warm-ups + speaking tips (none medical).', iconName: 'Radio' },
-  { id: '31', category: 'Public Speaking + Confidence', title: 'First Impression Tips', description: 'Fun, safe social confidence boosts.', iconName: 'Star' },
-
-  // 🏡 HOME & LIFESTYLE (32-36)
-  { id: '32', category: 'Home & Lifestyle', title: 'Small Task Game Plan', description: 'Pick 1 home task and get a quick plan.', iconName: 'CheckSquare' },
-  { id: '33', category: 'Home & Lifestyle', title: 'Pantry Refresh Ideas', description: 'Organize food in 10 mins.', iconName: 'Apple' },
-  { id: '34', category: 'Home & Lifestyle', title: 'Home Office Quick Upgrade', description: 'Fast suggestions using what you already have.', iconName: 'Briefcase' },
-  { id: '35', category: 'Home & Lifestyle', title: 'Fridge Organization Tips', description: 'Simple, family-friendly ideas.', iconName: 'Box' },
-  { id: '36', category: 'Home & Lifestyle', title: 'Garage Declutter Strategy', description: 'One small section to start.', iconName: 'Trash2' },
-
-  // 🎉 JUST FUN + SOCIAL (37-46)
-  { id: '37', category: 'Just Fun + Social', title: 'Desert-Themed Trivia', description: 'Local restaurants, streets, history, celebrities.', iconName: 'Compass' },
-  { id: '38', category: 'Just Fun + Social', title: 'Neighborhood Guessing Game', description: 'Guess which Ahwatukee area (The Foothills, etc.)', iconName: 'MapPin' },
-  { id: '39', category: 'Just Fun + Social', title: 'Emoji Life Story', description: 'Tell your story using only emojis.', iconName: 'Smile' },
-  { id: '40', category: 'Just Fun + Social', title: 'Guess My Favorite Things', description: 'Fun question round.', iconName: 'HelpCircle' },
-  { id: '41', category: 'Just Fun + Social', title: 'Random Wheel of Topics', description: 'Spin → random fun conversation.', iconName: 'RotateCw' },
-  { id: '42', category: 'Just Fun + Social', title: 'Yes or No Speed Round', description: 'Rapid-fire choices.', iconName: 'Zap' },
-  { id: '43', category: 'Just Fun + Social', title: 'Would You Rather: Arizona Edition', description: 'Funny, harmless local scenarios.', iconName: 'GitBranch' },
-  { id: '44', category: 'Just Fun + Social', title: 'Pet Show & Tell', description: 'Introduce your pets — chaos included.', iconName: 'Dog' },
-  { id: '45', category: 'Just Fun + Social', title: 'Funny Story Swap', description: 'Share hilarious fails.', iconName: 'Laugh' },
-  { id: '46', category: 'Just Fun + Social', title: 'Room Zoom Challenge', description: 'Find one weird item in your room.', iconName: 'Search' },
-
-  // 🎧 MUSIC & ENTERTAINMENT (47-49)
-  { id: '47', category: 'Music & Entertainment', title: 'Mini Roast (Nice Only)', description: 'Jokes about your hobbies + interests (friendly).', iconName: 'Laugh' },
-  { id: '48', category: 'Music & Entertainment', title: 'Your Life as a Movie', description: 'We build your movie title + poster concept.', iconName: 'Film' },
-  { id: '49', category: 'Music & Entertainment', title: 'Mini Smart Home Tips', description: 'Basic, easy boosts (no survival, no repairs).', iconName: 'Zap' },
-
-  // 💳 LIGHT BUSINESS + CREDIT (50)
-  { id: '50', category: 'Mystery Pick', title: 'Mystery Session', description: 'We pick something fun for you. Stay surprised!', iconName: 'HelpCircle' },
+  // ============ HALF CLASS (25 MIN) - $29 - QUICK WINS ============
+  
+  // Quick Creative
+  { id: 'hc1', category: 'Quick Creative', title: 'Quick Logo Concepts', description: 'Fast brainstorm — 3 logo direction ideas in one session.', iconName: 'Pencil', classType: 'half' },
+  { id: 'hc2', category: 'Quick Creative', title: 'Photo Quick Edit', description: 'Transform 3 photos with quick professional touch-ups.', iconName: 'ImagePlus', classType: 'half' },
+  { id: 'hc3', category: 'Quick Creative', title: 'Caption & Bio Writing', description: 'Craft perfect captions or bios for your social profiles.', iconName: 'Type', classType: 'half' },
+  { id: 'hc4', category: 'Quick Creative', title: 'Playlist Builder', description: 'Curated playlist for any mood, event, or vibe you need.', iconName: 'Headphones', classType: 'half' },
+  
+  // Quick Tech
+  { id: 'hc5', category: 'Quick Tech', title: 'Fix One Tech Issue', description: 'Bring your one frustrating problem — we solve it together.', iconName: 'Wrench', classType: 'half' },
+  { id: 'hc6', category: 'Quick Tech', title: 'App Setup & Tour', description: 'Get any app installed and learn to use it properly.', iconName: 'Download', classType: 'half' },
+  { id: 'hc7', category: 'Quick Tech', title: 'Email Inbox Cleanup', description: 'Organize, unsubscribe, and set up folders that work.', iconName: 'Mail', classType: 'half' },
+  { id: 'hc8', category: 'Quick Tech', title: 'Phone Photo Backup', description: 'Set up automatic backup so you never lose memories.', iconName: 'Cloud', classType: 'half' },
+  
+  // Quick Business
+  { id: 'hc9', category: 'Quick Business', title: 'Resume Quick Review', description: 'Fast feedback and improvement tips on your resume.', iconName: 'FileCheck', classType: 'half' },
+  { id: 'hc10', category: 'Quick Business', title: 'LinkedIn Power-Up', description: 'Quick review and tips to stand out to recruiters.', iconName: 'Linkedin', classType: 'half' },
+  { id: 'hc11', category: 'Quick Business', title: 'Business Name Brainstorm', description: 'Stuck on naming? Rapid brainstorm to find the perfect name.', iconName: 'Lightbulb', classType: 'half' },
+  { id: 'hc12', category: 'Quick Business', title: 'Elevator Pitch Polish', description: 'Perfect your 30-second introduction for networking.', iconName: 'MessageCircle', classType: 'half' },
+  
+  // Quick Lifestyle
+  { id: 'hc13', category: 'Quick Lifestyle', title: 'Outfit Check', description: 'Quick advice on what to wear for any occasion.', iconName: 'Shirt', classType: 'half' },
+  { id: 'hc14', category: 'Quick Lifestyle', title: 'Profile Photo Tips', description: 'Take a great profile picture with your phone.', iconName: 'User', classType: 'half' },
+  { id: 'hc15', category: 'Quick Lifestyle', title: 'Gift Idea Session', description: 'Stuck on what to buy? Find the perfect gift together.', iconName: 'Gift', classType: 'half' },
+  { id: 'hc16', category: 'Quick Lifestyle', title: 'Quick Recipe Help', description: 'Cooking guidance for a specific dish or meal planning.', iconName: 'Utensils', classType: 'half' },
+  
+  // Quick Wellness & Fun
+  { id: 'hc17', category: 'Quick Fun', title: 'Motivation Boost', description: 'Feeling stuck? Quick energy boost and fresh perspective.', iconName: 'Zap', classType: 'half' },
+  { id: 'hc18', category: 'Quick Fun', title: 'Trivia & Games', description: 'Fun trivia session — test your knowledge and laugh.', iconName: 'HelpCircle', classType: 'half' },
+  { id: 'hc19', category: 'Quick Fun', title: 'Pet Show & Tell', description: 'Introduce your pets — stories, tricks, and fun.', iconName: 'Dog', classType: 'half' },
+  { id: 'hc20', category: 'Quick Fun', title: 'Mystery Session', description: 'Surprise pick based on your mood — trust the vibe!', iconName: 'Sparkles', classType: 'half' },
 ];
 
 export const CATEGORIES = Array.from(new Set(SERVICES_LIST.map(s => s.category)));
