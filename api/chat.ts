@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Using gemini-2.5-flash stable model
+// Using gemini-1.5-pro model with models/ prefix
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -31,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const { GoogleGenerativeAI } = await import('@google/generative-ai');
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-pro' });
 
     const systemPrompt = `You are the AI Concierge for "daymaker2day", a futuristic micro-service booking app.
 We offer 25-minute and 55-minute Zoom sessions.
