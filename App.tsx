@@ -10,6 +10,7 @@ import { UserProfile } from './components/UserProfile';
 import { AIChat } from './components/AIChat';
 import { AdminPortal } from './components/AdminPortal';
 import { LiveSession } from './components/LiveSession';
+import { PricingModal } from './components/PricingModal';
 import { SERVICES_LIST } from './constants';
 import { format } from 'date-fns';
 import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon, Settings, Radio } from 'lucide-react';
@@ -33,6 +34,7 @@ const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showLiveSession, setShowLiveSession] = useState(false);
+  const [showPricing, setShowPricing] = useState(false);
   const [activeSession, setActiveSession] = useState<ScheduledSession | null>(null);
   const [scheduledSessions, setScheduledSessions] = useState<ScheduledSession[]>([]);
   const [booking, setBooking] = useState<BookingDetails>({
@@ -199,7 +201,7 @@ const App: React.FC = () => {
                     </div>
                   )}
                   <button
-                    onClick={() => { setShowSettings(false); }}
+                    onClick={() => { setShowSettings(false); setShowPricing(true); }}
                     className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left"
                   >
                     <span className="text-blue-400">💰</span>
@@ -407,6 +409,9 @@ const App: React.FC = () => {
 
       {/* Smart Concierge */}
       <AIChat />
+
+      {/* Pricing Modal */}
+      {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
 
       {/* Admin Portal */}
       {showAdmin && <AdminPortal onClose={() => setShowAdmin(false)} />}
