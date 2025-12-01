@@ -1,39 +1,85 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Monitor, MonitorOff, Mic, MicOff, Video, VideoOff, Phone, MessageCircle, Send, X, Maximize2, Minimize2 } from 'lucide-react';
+import { Monitor, MonitorOff, Mic, MicOff, Video, VideoOff, Phone, MessageCircle, Send, X, Maximize2, Minimize2, Clock, Calendar, User, Star, Loader2 } from 'lucide-react';
+import { SERVICES_LIST } from '../constants';
 
 interface LiveSessionProps {
   hostName: string;
   hostImage: string;
   sessionTitle: string;
+  customerName?: string;
+  customerBio?: string;
+  customerEmail?: string;
+  scheduledTime?: string;
   onEndSession: () => void;
+  isHostView?: boolean; // true = host (you), false = customer
 }
+
+// Upcoming events mock data
+const UPCOMING_EVENTS = [
+  { title: 'Daymaker Pet Party', time: '3:00 PM', customer: 'Sarah M.' },
+  { title: 'Daymaker Style Check', time: '4:30 PM', customer: 'Jake L.' },
+  { title: 'Daymaker Beat Jam', time: '5:00 PM', customer: 'Maria T.' },
+];
 
 export const LiveSession: React.FC<LiveSessionProps> = ({
   hostName,
   hostImage,
   sessionTitle,
+  customerName = 'Guest User',
+  customerBio = 'Looking forward to this session!',
+  customerEmail = 'guest@example.com',
+  scheduledTime = '2:00 PM',
   onEndSession,
+  isHostView = true,
 }) => {
+  const [hostJoined, setHostJoined] = useState(false);
+  const [waitingTime, setWaitingTime] = useState(0);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<{ from: string; text: string; time: string }[]>([
-    { from: 'host', text: 'Hey! I can see you. Ready when you are! 👋', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
-  ]);
+  const [chatMessages, setChatMessages] = useState<{ from: string; text: string; time: string }[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [sessionTime, setSessionTime] = useState(0);
   const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Session timer
+  // Waiting timer (before host joins)
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSessionTime(prev => prev + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (!hostJoined) {
+      const timer = setInterval(() => {
+        setWaitingTime(prev => prev + 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [hostJoined]);
+
+  // Session timer (after host joins)
+  useEffect(() => {
+    if (hostJoined) {
+      const timer = setInterval(() => {
+        setSessionTime(prev => prev + 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [hostJoined]);
+
+  // If host view, auto-join and set initial message
+  useEffect(() => {
+    if (isHostView) {
+      // Host joins after a brief moment (simulating connection)
+      const joinTimer = setTimeout(() => {
+        setHostJoined(true);
+        setChatMessages([{
+          from: 'host',
+          text: `Hey ${customerName}! I can see you. Ready when you are! 👋`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }]);
+      }, 1500);
+      return () => clearTimeout(joinTimer);
+    }
+  }, [isHostView, customerName]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -55,7 +101,6 @@ export const LiveSession: React.FC<LiveSessionProps> = ({
         videoRef.current.srcObject = stream;
       }
 
-      // Handle when user stops sharing via browser UI
       stream.getVideoTracks()[0].onended = () => {
         stopScreenShare();
       };
@@ -86,20 +131,22 @@ export const LiveSession: React.FC<LiveSessionProps> = ({
   const sendMessage = () => {
     if (!newMessage.trim()) return;
     setChatMessages(prev => [...prev, {
-      from: 'user',
+      from: isHostView ? 'host' : 'user',
       text: newMessage,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }]);
     setNewMessage('');
     
-    // Simulate host response
-    setTimeout(() => {
-      setChatMessages(prev => [...prev, {
-        from: 'host',
-        text: 'Got it! Let me help you with that...',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }]);
-    }, 2000);
+    // Simulate response
+    if (!isHostView) {
+      setTimeout(() => {
+        setChatMessages(prev => [...prev, {
+          from: 'host',
+          text: 'Got it! Let me help you with that...',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }]);
+      }, 2000);
+    }
   };
 
   const toggleFullscreen = () => {
@@ -111,6 +158,198 @@ export const LiveSession: React.FC<LiveSessionProps> = ({
       setIsFullscreen(false);
     }
   };
+
+  // ============ WAITING ROOM ============
+  if (!hostJoined) {
+    return (
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-50 flex flex-col">
+        {/* Waiting Room Header */}
+        <div className="p-6 border-b border-white/10">
+          <div className="max-w-4xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-neon-blue/10 rounded-xl">
+                <Clock size={24} className="text-neon-blue" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">Waiting Room</h2>
+                <p className="text-gray-400 text-sm">Your session will begin shortly</p>
+              </div>
+            </div>
+            <button
+              onClick={onEndSession}
+              className="px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all"
+            >
+              Leave
+            </button>
+          </div>
+        </div>
+
+        {/* Main Waiting Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-4xl mx-auto p-6 grid md:grid-cols-2 gap-6">
+            
+            {/* Left: Session Info & Host Status */}
+            <div className="space-y-6">
+              {/* Session Card */}
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="relative">
+                    <img 
+                      src={hostImage} 
+                      alt={hostName}
+                      className="w-16 h-16 rounded-full border-2 border-gray-600 object-cover grayscale"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
+                      <Loader2 size={12} className="text-black animate-spin" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">{hostName}</h3>
+                    <p className="text-yellow-400 text-sm flex items-center gap-2">
+                      <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                      Connecting...
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Session</span>
+                    <span className="text-white font-medium">{sessionTitle}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Scheduled</span>
+                    <span className="text-neon-blue font-mono">{scheduledTime}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Waiting</span>
+                    <span className="text-white font-mono">{formatTime(waitingTime)}</span>
+                  </div>
+                </div>
+
+                {/* Waiting Animation */}
+                <div className="mt-6 p-4 bg-black/30 rounded-xl text-center">
+                  <div className="flex justify-center gap-1 mb-3">
+                    <div className="w-2 h-2 bg-neon-blue rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-neon-blue rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-neon-blue rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  </div>
+                  <p className="text-gray-400 text-sm">Host will join momentarily</p>
+                </div>
+              </div>
+
+              {/* Customer Bio (Host sees this) */}
+              {isHostView && (
+                <div className="bg-gradient-to-br from-neon-purple/10 to-neon-blue/10 rounded-2xl p-6 border border-neon-purple/20">
+                  <div className="flex items-center gap-2 mb-4">
+                    <User size={18} className="text-neon-purple" />
+                    <h4 className="font-bold text-white">Customer Info</h4>
+                  </div>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-neon-blue to-neon-purple flex items-center justify-center text-xl font-bold text-white">
+                      {customerName.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h5 className="text-white font-bold">{customerName}</h5>
+                      <p className="text-gray-400 text-sm">{customerEmail}</p>
+                    </div>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-gray-300 text-sm italic">"{customerBio}"</p>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
+                    <Star size={12} className="text-yellow-400" />
+                    <span>First-time customer</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right: Upcoming Events & Tips */}
+            <div className="space-y-6">
+              {/* Upcoming Events */}
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <div className="flex items-center gap-2 mb-4">
+                  <Calendar size={18} className="text-neon-green" />
+                  <h4 className="font-bold text-white">Upcoming Sessions</h4>
+                </div>
+                <div className="space-y-3">
+                  {UPCOMING_EVENTS.map((event, i) => (
+                    <div 
+                      key={i}
+                      className="flex items-center gap-3 p-3 bg-black/30 rounded-xl hover:bg-black/40 transition-colors"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-neon-green/10 flex items-center justify-center">
+                        <Clock size={18} className="text-neon-green" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-white text-sm font-medium">{event.title}</p>
+                        <p className="text-gray-500 text-xs">{event.customer}</p>
+                      </div>
+                      <span className="text-neon-green text-sm font-mono">{event.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tips While Waiting */}
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h4 className="font-bold text-white mb-4">💡 Quick Tips</h4>
+                <ul className="space-y-3 text-sm text-gray-400">
+                  <li className="flex items-start gap-2">
+                    <span className="text-neon-blue">•</span>
+                    Make sure your screen is ready to share
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-neon-blue">•</span>
+                    Close any private windows or tabs
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-neon-blue">•</span>
+                    Have your questions ready
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-neon-blue">•</span>
+                    Check your mic and camera
+                  </li>
+                </ul>
+              </div>
+
+              {/* Test Devices */}
+              <div className="flex gap-3">
+                <button className="flex-1 p-3 bg-white/5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm">
+                  <Mic size={16} />
+                  Test Mic
+                </button>
+                <button className="flex-1 p-3 bg-white/5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm">
+                  <Video size={16} />
+                  Test Camera
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom: Join as Host Button (for host view) */}
+        {isHostView && (
+          <div className="p-6 border-t border-white/10 bg-black/50">
+            <div className="max-w-4xl mx-auto flex items-center justify-between">
+              <div className="text-gray-400 text-sm">
+                <span className="text-white font-bold">{customerName}</span> is waiting for you
+              </div>
+              <button
+                onClick={() => setHostJoined(true)}
+                className="px-8 py-3 bg-gradient-to-r from-neon-green to-emerald-500 text-black font-bold rounded-xl hover:shadow-[0_0_30px_rgba(0,255,136,0.4)] transition-all flex items-center gap-2"
+              >
+                <Video size={20} />
+                Join Session Now
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col">

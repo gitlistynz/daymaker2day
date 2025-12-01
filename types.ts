@@ -31,7 +31,7 @@ export interface BookingDetails {
   timeSlot: string | null;
   userEmail: string;
   userName: string;
-  bookingType: BookingType | null; // 'BOOK' or 'GIFT'
+  bookingType?: BookingType | null; // 'BOOK' or 'GIFT'
   recipientEmail?: string; // For gifts
   recipientName?: string; // For gifts
   giftDeliveryMethod?: GiftDeliveryMethod; // How to send gift

@@ -23,6 +23,9 @@ interface ScheduledSession {
   timeSlot: string;
   hostName: string;
   hostImage: string;
+  customerName: string;
+  customerEmail: string;
+  customerBio: string;
 }
 
 const App: React.FC = () => {
@@ -110,7 +113,10 @@ const App: React.FC = () => {
         date: booking.date,
         timeSlot: booking.timeSlot,
         hostName: 'DayMaker',
-        hostImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+        hostImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        customerName: booking.userName,
+        customerEmail: booking.userEmail,
+        customerBio: 'Excited to learn something new today!'
       };
       
       setScheduledSessions(prev => [...prev, newSession]);
@@ -268,7 +274,7 @@ const App: React.FC = () => {
 
         {/* MENU VIEW */}
         {currentView === AppView.MENU && (
-          <MenuGrid onSelect={handleServiceSelect} />
+          <MenuGrid onSelectService={handleServiceSelect} />
         )}
 
         {/* BOOKING VIEW */}
@@ -411,6 +417,11 @@ const App: React.FC = () => {
           hostName={activeSession.hostName}
           hostImage={activeSession.hostImage}
           sessionTitle={activeSession.serviceTitle}
+          customerName={activeSession.customerName}
+          customerEmail={activeSession.customerEmail}
+          customerBio={activeSession.customerBio}
+          scheduledTime={activeSession.timeSlot}
+          isHostView={true}
           onEndSession={() => {
             setShowLiveSession(false);
             // Remove the session from scheduled sessions after ending
