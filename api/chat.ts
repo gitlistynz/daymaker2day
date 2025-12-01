@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const { GoogleGenerativeAI } = await import('@google/generative-ai');
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-8b' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const systemPrompt = `You are the AI Concierge for "daymaker2day", a futuristic micro-service booking app.
 We offer 25-minute and 55-minute Zoom sessions.
