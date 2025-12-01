@@ -42,8 +42,8 @@ Your task:
 
     const prompt = `${systemPrompt}\n\nUser Query: "${userQuery}"`;
 
-    // Use REST API directly to avoid SDK model naming issues
-    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Use REST API directly - using Gemini 2.0 Flash
+    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
     
     const response = await fetch(apiUrl, {
       method: 'POST',
