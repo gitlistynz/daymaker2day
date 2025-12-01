@@ -4,11 +4,8 @@ export const getServiceRecommendation = async (userQuery: string): Promise<strin
   const menuContext = SERVICES_LIST.map(s => `- ${s.title} (${s.category}): ${s.description}`).join('\n');
 
   try {
-    // In production (deployed), use the API endpoint
-    // In development, use the API endpoint too (will be proxied by Vite or Vercel)
-    const apiUrl = import.meta.env.DEV 
-      ? '/api/chat' 
-      : 'https://daymaker2day.vercel.app/api/chat';
+    // Use relative path - will work on any domain
+    const apiUrl = '/api/chat';
 
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -22,6 +19,8 @@ export const getServiceRecommendation = async (userQuery: string): Promise<strin
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error:', response.status, errorText);
       throw new Error(`API request failed: ${response.status}`);
     }
 
