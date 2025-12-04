@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { AppView, ServiceItem, BookingDetails, UserProfileData, BookingType, GiftDeliveryMethod } from './types';
+import { QRCodePage } from './components/QRCodePage';
+import ChristmasFront from './components/ChristmasFront';
+import { ChristmasLanding } from './components/ChristmasLanding';
+import { ChristmasPricing } from './components/ChristmasPricing';
+import { ChristmasServices } from './components/ChristmasServices';
+import { ChristmasCheckout } from './components/ChristmasCheckout';
+import ChristmasPayment from './components/ChristmasPayment';
+import { ChristmasConfirmation } from './components/ChristmasConfirmation';
+import { LandingPage } from './components/LandingPage';
+import { SignupPage } from './components/SignupPage';
+import { PricingPage } from './components/PricingPage';
 import { MenuGrid } from './components/MenuGrid';
 import { SessionDetail } from './components/SessionDetail';
 import { BookOrGift } from './components/BookOrGift';
@@ -13,7 +24,7 @@ import { LiveSession } from './components/LiveSession';
 import { PricingModal } from './components/PricingModal';
 import { SERVICES_LIST } from './constants';
 import { format } from 'date-fns';
-import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon, Settings, Radio } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Terminal, User, Gift, Calendar as CalendarIcon, Settings, Radio, Bell, BellOff } from 'lucide-react';
 
 // Type for scheduled sessions
 interface ScheduledSession {
@@ -30,7 +41,154 @@ interface ScheduledSession {
 }
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<AppView>(AppView.HOME);
+  const [currentView, setCurrentView] = useState<AppView>(AppView.QR_CODE);
+  // Demo-only mode when the path is /christmas-demo — keeps the Christmas experience isolated
+  const [isChristmasDemo, setIsChristmasDemo] = useState<boolean>(() => {
+    try {
+      return window.location.pathname.toLowerCase().startsWith('/christmas-demo');
+    } catch (e) {
+      return false;
+    }
+  });
+  const bellsAudioRef = React.useRef<HTMLAudioElement>(null);
+  // Default to OFF unless previously enabled by the user (explicit request: "turn the bell off")
+  const [bellsEnabled, setBellsEnabled] = useState<boolean>(() => {
+    try {
+      const raw = localStorage.getItem('dm2d_bells_enabled');
+      return raw === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+  useEffect(() => {
+    // If we're in the christmas-demo path, start the app on the QR code to match demo flow
+    if (isChristmasDemo) {
+      setCurrentView(AppView.QR_CODE);
+      return;
+    }
+    // Only play bells for the first two Christmas pages: landing and pricing
+    const christmasViews = new Set([
+      AppView.CHRISTMAS_LANDING,
+      AppView.CHRISTMAS_PRICING
+    ]);
+
+    const audio = bellsAudioRef.current;
+    if (!audio) return;
+
+    // Ensure audio attributes for consistent playback
+    audio.loop = true;
+    audio.volume = 0.35; // comfortable starting volume
+
+    const shouldPlay = christmasViews.has(currentView) && bellsEnabled;
+
+    if (shouldPlay) {
+      // Try to play unmuted first; some browsers will block this and throw
+      // Ensure we use the enabled state — if not yet enabled we still attempt to play
+      audio.muted = false;
+      audio.currentTime = 0;
+      audio.play().catch(() => {
+        // If autoplay is blocked, start muted so it can autoplay and remain playing
+        // If autoplay blocked, keep it muted but do not require multiple clicks —
+        // user gesture listeners on the app will enable audio on first tap
+        audio.muted = true;
+        audio.play().catch(() => {
+          // final fallback: leave it paused
+          console.warn('Unable to autoplay bells even muted');
+        });
+      });
+    } else {
+      // Outside christmas flow — pause and reset
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    // cleanup not required — handled on next effect run
+  }, [currentView]);
+
+  // If the URL path changes to /christmas-demo (e.g., scanned QR), enable demo mode.
+  useEffect(() => {
+    const onPop = () => {
+      try {
+        const path = window.location.pathname.toLowerCase();
+        if (path.startsWith('/christmas-demo')) {
+          setIsChristmasDemo(true);
+          setCurrentView(AppView.QR_CODE);
+        }
+      } catch (e) {}
+    };
+
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  // Try to play bells when the app first loads — browsers may block autoplay.
+  // Listen for a single user interaction (pointerdown/keydown) to enable audio
+  useEffect(() => {
+    const audio = bellsAudioRef.current;
+    if (!audio) return;
+
+    const enableBells = async () => {
+      try {
+        // only try to enable if user hasn't turned them off
+        if (!bellsEnabled) return;
+        await audio.play();
+        audio.muted = false;
+        setBellsEnabled(true);
+      } catch (err) {
+        // Autoplay blocked — keep waiting for a real user interaction
+        setBellsEnabled(false);
+      }
+    };
+
+    // Attempt to play immediately (best-effort) only if bells are enabled
+    if (bellsEnabled) enableBells();
+
+    // If blocked, attach a single-use pointerdown/keydown listener that will
+    // start the audio with one user gesture. Using pointerdown covers touch and mouse
+    const onFirstGesture = async () => {
+      try {
+        if (!bellsEnabled) return;
+        await audio.play();
+        audio.muted = false;
+        setBellsEnabled(true);
+      } catch (e) {
+        // still blocked — leave bellsDisabled
+        setBellsEnabled(false);
+      }
+      // remove listeners automatically (used with once: true below)
+    };
+
+    window.addEventListener('pointerdown', onFirstGesture, { once: true });
+    window.addEventListener('keydown', onFirstGesture, { once: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', onFirstGesture as EventListener);
+      window.removeEventListener('keydown', onFirstGesture as EventListener);
+    };
+  }, []);
+
+  // Persist bellsEnabled preference and stop/start audio immediately when toggled
+  useEffect(() => {
+    try { localStorage.setItem('dm2d_bells_enabled', bellsEnabled ? 'true' : 'false'); } catch {}
+    const audio = bellsAudioRef.current;
+    if (!audio) return;
+
+    if (!bellsEnabled) {
+      audio.pause();
+      audio.currentTime = 0;
+    } else {
+      // If user re-enabled and we're on an allowed view, attempt to play
+      const allowed = [AppView.CHRISTMAS_LANDING, AppView.CHRISTMAS_PRICING];
+      if (allowed.includes(currentView)) {
+        audio.play().catch(() => {});
+      }
+    }
+  }, [bellsEnabled, currentView]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [christmasCart, setChristmasCart] = useState<string[]>([]);
+  const [christmasTotal, setChristmasTotal] = useState(0);
+  const [christmasBuyerInfo, setChristmasBuyerInfo] = useState({ name: '', email: '', deliveryMethod: 'email' as 'email' | 'sms' | 'copy', recipientInfo: '' });
   const [showSettings, setShowSettings] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showLiveSession, setShowLiveSession] = useState(false);
@@ -46,12 +204,23 @@ const App: React.FC = () => {
   });
   const [selectedServiceData, setSelectedServiceData] = useState<ServiceItem | null>(null);
   
-  // Mock User Profile Data
+  // User Profile - starts with placeholder, replaced on signup
   const [userProfile, setUserProfile] = useState<UserProfileData>({
-    name: 'Alex Voyager',
-    email: 'alex@future.net',
-    bio: 'Focusing on productivity and mental clarity.'
+    name: '',
+    email: '',
+    bio: ''
   });
+
+  const handleSignup = (name: string, email: string) => {
+    setUserProfile({ name, email, bio: '' });
+    setIsAuthenticated(true);
+    setCurrentView(AppView.PRICING);
+  };
+
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlan(planId);
+    setCurrentView(AppView.HOME);
+  };
 
   // Check for active sessions every minute
   useEffect(() => {
@@ -135,311 +304,226 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-neon-blue selection:text-black overflow-x-hidden relative">
-      
-      {/* Background Elements */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-neon-blue/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-neon-purple/5 rounded-full blur-[120px]" />
-        <div className="absolute top-[20%] left-[20%] w-[2px] h-[2px] bg-white opacity-50 rounded-full animate-pulse" />
-        <div className="absolute top-[60%] right-[30%] w-[3px] h-[3px] bg-white opacity-30 rounded-full animate-pulse delay-700" />
-      </div>
+    <>
+      <audio ref={bellsAudioRef} src="/bells.m4a" preload="auto" loop />
 
-      {/* Navigation / Header */}
-      <nav className="relative z-50 flex items-center justify-between px-6 py-6 md:px-12">
-        <div 
-            onClick={() => setCurrentView(AppView.HOME)}
-            className="flex items-center gap-2 cursor-pointer group"
-        >
-            <div className="p-2 bg-white/5 border border-white/10 rounded-lg group-hover:border-neon-blue transition-colors">
-                <Terminal size={20} className="text-neon-blue" />
-            </div>
-            <span className="font-orbitron font-bold text-xl tracking-widest">
-                daymaker<span className="text-neon-blue">2day</span>
-            </span>
-        </div>
-        
-        <div className="flex items-center gap-4">
-             {currentView !== AppView.HOME && (
-                 <button 
-                    onClick={() => setCurrentView(AppView.HOME)}
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
-                 >
-                    HOME
-                 </button>
-            )}
-            
-            <button
-                onClick={() => setCurrentView(AppView.PROFILE)}
-                className="p-2 rounded-full border transition-all duration-300 bg-white/5 border-white/10 hover:border-neon-blue/50"
-            >
-                <User size={20} className="text-neon-blue" />
-            </button>
-
-            {/* Settings Gear Button */}
-            <div className="relative">
-              <button
-                onClick={() => setShowSettings(!showSettings)}
-                className="p-2 rounded-full border transition-all duration-300 bg-white/5 border-white/10 hover:border-neon-blue/50"
-              >
-                <Settings size={20} className="text-neon-blue" />
-              </button>
-
-              {/* Settings Dropdown */}
-              {showSettings && (
-                <div className="absolute top-12 right-0 bg-gray-900 border border-gray-700 rounded-lg shadow-xl overflow-hidden z-50 min-w-[200px]">
-                  {/* Show upcoming sessions if any */}
-                  {scheduledSessions.length > 0 && (
-                    <div className="px-4 py-3 border-b border-gray-700 bg-white/5">
-                      <div className="text-xs text-gray-400 mb-2">UPCOMING SESSIONS</div>
-                      {scheduledSessions.slice(0, 2).map(session => (
-                        <div key={session.id} className="flex items-center gap-2 text-sm text-white mb-1">
-                          <span className="w-2 h-2 bg-neon-blue rounded-full"></span>
-                          <span className="truncate">{session.serviceTitle}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <button
-                    onClick={() => { setShowSettings(false); setShowPricing(true); }}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left"
-                  >
-                    <span className="text-blue-400">💰</span>
-                    <span>Plans & Pricing</span>
-                  </button>
-                  <button
-                    onClick={() => { setShowSettings(false); }}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left border-t border-gray-700"
-                  >
-                    <span className="text-green-400">📋</span>
-                    <span>Terms of Use</span>
-                  </button>
-                  <button
-                    onClick={() => { setShowSettings(false); }}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors text-left border-t border-gray-700"
-                  >
-                    <span className="text-purple-400">🔒</span>
-                    <span>Privacy Policy</span>
-                  </button>
-                  <button
-                    onClick={() => { setShowSettings(false); setShowAdmin(true); }}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-gray-300 hover:text-white hover:bg-red-900/30 transition-colors text-left border-t border-gray-700"
-                  >
-                    <span className="text-red-400">🔐</span>
-                    <span className="font-semibold">Admin Portal</span>
-                  </button>
-                </div>
-              )}
-            </div>
-        </div>
-      </nav>
-
-      <main className="relative z-10 flex flex-col items-center justify-start min-h-[85vh] px-4">
-        
-        {/* HOME VIEW */}
-        {currentView === AppView.HOME && (
-          <div className="flex flex-col items-center justify-center text-center mt-12 md:mt-24 max-w-4xl animate-fadeIn">
-            <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-neon-blue tracking-[0.2em]">
-              SYSTEM ONLINE // V2.0
-            </div>
-            <h1 className="text-5xl md:text-7xl font-orbitron font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-600 leading-tight">
-              UPGRADE YOUR<br/> REALITY
-            </h1>
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
-              Access 50+ specialized micro-services designed to optimize your day in exactly 25 minutes. 
-              Start with a 1-on-1 Zoom session. Future-proof your schedule.
-            </p>
-            <button 
-              onClick={() => setCurrentView(AppView.MENU)}
-              className="group relative px-8 py-4 bg-white text-black font-bold font-orbitron tracking-wider rounded-lg hover:bg-neon-blue transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(0,243,255,0.6)]"
-            >
-              INITIATE BOOKING
-              <div className="absolute inset-0 border border-white rounded-lg scale-105 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 pointer-events-none" />
-            </button>
-            
-            <div className="mt-16 grid grid-cols-3 gap-8 text-center text-gray-500 font-mono text-sm">
-                <div>
-                    <span className="block text-2xl text-white font-orbitron mb-1">50+</span>
-                    MODULES
-                </div>
-                <div>
-                    <span className="block text-2xl text-white font-orbitron mb-1">25m</span>
-                    DURATION
-                </div>
-                <div>
-                    <span className="block text-2xl text-white font-orbitron mb-1">1:1</span>
-                    ZOOM
-                </div>
-            </div>
-          </div>
-        )}
-
-        {/* MENU VIEW */}
-        {currentView === AppView.MENU && (
-          <MenuGrid onSelectService={handleServiceSelect} />
-        )}
-
-        {/* BOOKING VIEW */}
-        {currentView === AppView.BOOKING && (
-          <BookingCalendar 
-            onConfirm={handleSlotConfirm} 
-            onBack={() => setCurrentView(AppView.MENU)} 
-          />
-        )}
-
-        {/* PROFILE VIEW */}
-        {currentView === AppView.PROFILE && (
-            <UserProfile 
-                profile={userProfile}
-                onUpdateProfile={handleUpdateProfile}
-                onBack={() => setCurrentView(AppView.HOME)}
-            />
-        )}
-
-        {/* CONFIRMATION / FORM VIEW */}
-        {currentView === AppView.CONFIRMATION && selectedServiceData && (
-           <div className="w-full max-w-2xl mx-auto mt-8 animate-fadeIn">
-              <button 
-                onClick={() => setCurrentView(AppView.BOOKING)}
-                className="mb-6 flex items-center gap-2 text-gray-400 hover:text-neon-blue transition-colors"
-              >
-                <ArrowLeft size={16} /> CHANGE TIME
-              </button>
-
-              <div className="glass-panel p-8 md:p-12 rounded-3xl border border-neon-blue/30 shadow-[0_0_40px_rgba(0,243,255,0.1)]">
-                <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-tr from-neon-blue to-neon-purple rounded-full mx-auto flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(188,19,254,0.4)]">
-                        <CheckCircle className="text-white" size={32} />
-                    </div>
-                    <h2 className="text-3xl font-orbitron text-white mb-2">SECURE SLOT</h2>
-                    <p className="text-gray-400">Finalize your 25-minute session.</p>
-                </div>
-
-                <div className="bg-white/5 rounded-xl p-6 mb-8 border border-white/10 flex flex-col gap-4">
-                    <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                        <span className="text-gray-400 text-sm">SERVICE</span>
-                        <span className="text-white font-bold text-right">{selectedServiceData.title}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                        <span className="text-gray-400 text-sm">DATE</span>
-                        <span className="text-white font-bold text-right">
-                            {booking.date && format(booking.date, 'MMMM do, yyyy')}
-                        </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-sm">TIME</span>
-                        <span className="text-neon-blue font-bold text-right font-mono">{booking.timeSlot}</span>
-                    </div>
-                </div>
-
-                <form onSubmit={handleFinalizeBooking} className="space-y-6">
-                    <div>
-                        <label className="block text-xs font-mono text-neon-blue mb-2">IDENTIFIER (NAME)</label>
-                        <input 
-                            required
-                            type="text" 
-                            className="w-full bg-black/50 border border-white/20 rounded-lg p-3 text-white focus:border-neon-blue focus:outline-none transition-colors"
-                            value={booking.userName}
-                            onChange={e => setBooking(b => ({...b, userName: e.target.value}))}
-                            placeholder="John Doe"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-mono text-neon-blue mb-2">CONTACT (EMAIL)</label>
-                        <input 
-                            required
-                            type="email" 
-                            className="w-full bg-black/50 border border-white/20 rounded-lg p-3 text-white focus:border-neon-blue focus:outline-none transition-colors"
-                            value={booking.userEmail}
-                            onChange={e => setBooking(b => ({...b, userEmail: e.target.value}))}
-                            placeholder="john@example.com"
-                        />
-                    </div>
-                    
-                    <button 
-                        type="submit"
-                        className="w-full py-4 mt-4 bg-white text-black font-bold font-orbitron tracking-widest rounded-lg hover:bg-neon-blue transition-all duration-300"
-                    >
-                        INITIALIZE LINK
-                    </button>
-                </form>
-              </div>
-           </div>
-        )}
-
-      </main>
-
-      {/* Floating Join Live Session Button - ONLY shows when there's an active scheduled session */}
-      {activeSession && (
-        <div className="fixed bottom-24 right-6 z-40 animate-fadeIn">
-          {/* Pulsing ring effect */}
-          <div className="absolute inset-0 rounded-full bg-neon-green/30 animate-ping"></div>
-          
-          <button
-            onClick={() => setShowLiveSession(true)}
-            className="relative flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-neon-green to-emerald-500 text-black font-bold rounded-full shadow-[0_0_30px_rgba(0,255,136,0.4)] hover:shadow-[0_0_40px_rgba(0,255,136,0.6)] transition-all group"
-          >
-            {/* Host Profile Image */}
-            <div className="relative">
-              <img 
-                src={activeSession.hostImage} 
-                alt={activeSession.hostName}
-                className="w-10 h-10 rounded-full border-2 border-black object-cover"
-              />
-              <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-white border-2 border-neon-green"></span>
-              </span>
-            </div>
-            
-            <div className="text-left">
-              <div className="text-xs opacity-70">Session Ready</div>
-              <div className="font-bold">Join Now</div>
-            </div>
-            
-            <Radio size={20} className="animate-pulse" />
-          </button>
-          
-          {/* Session info tooltip */}
-          <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-black/90 rounded-lg text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-            {activeSession.serviceTitle}
-          </div>
-        </div>
+      {/* Very-first front page (QR only, no bells) */}
+      {currentView === AppView.QR_CODE && (
+        <QRCodePage onContinue={() => setCurrentView(AppView.CHRISTMAS_LANDING)} />
       )}
 
-      {/* Smart Concierge */}
-      <AIChat />
+      {/* Christmas Landing Page */}
+      {currentView === AppView.CHRISTMAS_LANDING && (
+        // Consolidated flow: skip the intermediate pricing page and go straight to services.
+        <ChristmasLanding onEnter={() => setCurrentView(AppView.CHRISTMAS_SERVICES)} />
+      )}
 
-      {/* Pricing Modal */}
-      {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
+      {/* Christmas Pricing Page */}
+      {currentView === AppView.CHRISTMAS_PRICING && (
+        <ChristmasPricing onSelectPlan={() => setCurrentView(AppView.CHRISTMAS_SERVICES)} />
+      )}
 
-      {/* Admin Portal */}
-      {showAdmin && <AdminPortal onClose={() => setShowAdmin(false)} />}
+      {/* Christmas Services Page */}
+      {currentView === AppView.CHRISTMAS_SERVICES && (
+        <ChristmasServices 
+          cart={christmasCart}
+          onUpdateCart={setChristmasCart}
+          onCheckout={() => setCurrentView(AppView.CHRISTMAS_CHECKOUT)}
+          onSelectService={(serviceId) => {
+            setSelectedServiceData(SERVICES_LIST.find(s => s.id === serviceId) || null);
+            setCurrentView(AppView.SIGNUP);
+          }} 
+        />
+      )}
 
-      {/* Live Session */}
-      {showLiveSession && activeSession && (
-        <LiveSession 
-          hostName={activeSession.hostName}
-          hostImage={activeSession.hostImage}
-          sessionTitle={activeSession.serviceTitle}
-          customerName={activeSession.customerName}
-          customerEmail={activeSession.customerEmail}
-          customerBio={activeSession.customerBio}
-          scheduledTime={activeSession.timeSlot}
-          isHostView={true}
-          onEndSession={() => {
-            setShowLiveSession(false);
-            // Remove the session from scheduled sessions after ending
-            setScheduledSessions(prev => prev.filter(s => s.id !== activeSession.id));
-            setActiveSession(null);
+      {/* Christmas Checkout Page */}
+      {currentView === AppView.CHRISTMAS_CHECKOUT && (
+        <ChristmasCheckout
+          cartItems={christmasCart}
+          onBack={() => setCurrentView(AppView.CHRISTMAS_SERVICES)}
+          onComplete={() => {
+            const subtotal = christmasCart.length * 25;
+            const tax = subtotal * 0.1;
+            setChristmasTotal(subtotal + tax);
+            setCurrentView(AppView.CHRISTMAS_PAYMENT);
           }}
         />
       )}
 
-      <footer className="relative z-10 py-8 text-center text-gray-600 text-sm font-mono mt-auto border-t border-white/5">
-        <p>DAYMAKER2DAY SYSTEM © 2024 // STATUS: OPTIMAL</p>
-      </footer>
-    </div>
+      {/* Christmas Payment Page */}
+      {currentView === AppView.CHRISTMAS_PAYMENT && (
+        <ChristmasPayment
+          cartItems={christmasCart}
+          total={christmasTotal}
+          onBack={() => setCurrentView(AppView.CHRISTMAS_CHECKOUT)}
+          onComplete={() => setCurrentView(AppView.CHRISTMAS_CONFIRMATION)}
+        />
+      )}
+
+      {/* Christmas Confirmation Page */}
+      {currentView === AppView.CHRISTMAS_CONFIRMATION && (
+        <ChristmasConfirmation
+          buyerEmail={christmasBuyerInfo.email}
+          buyerName={christmasBuyerInfo.name}
+          total={christmasTotal}
+          cartItems={christmasCart}
+          deliveryMethod={christmasBuyerInfo.deliveryMethod}
+          recipientInfo={christmasBuyerInfo.recipientInfo}
+          onDone={() => setCurrentView(AppView.CHRISTMAS_LANDING)}
+        />
+      )}
+
+      {/* Landing / Signup / Pricing */}
+      {currentView === AppView.LANDING && (
+        <LandingPage onGetStarted={() => setCurrentView(AppView.SIGNUP)} />
+      )}
+
+      {currentView === AppView.SIGNUP && (
+        <SignupPage onSignup={handleSignup} />
+      )}
+
+      {currentView === AppView.PRICING && (
+        <PricingPage onSelectPlan={handleSelectPlan} />
+      )}
+
+      {/* Main app (authenticated) */}
+      {isAuthenticated && !isChristmasDemo && currentView !== AppView.LANDING && currentView !== AppView.SIGNUP && currentView !== AppView.PRICING && (
+        <>
+          <nav>
+            <div onClick={() => setCurrentView(AppView.HOME)}>
+              <Terminal size={20} />
+              <span>daymaker<span>2day</span></span>
+            </div>
+
+            <div>
+              {currentView !== AppView.HOME && (
+                <button onClick={() => setCurrentView(AppView.HOME)}>HOME</button>
+              )}
+
+              <button onClick={() => setCurrentView(AppView.PROFILE)}>
+                <User size={20} />
+              </button>
+
+              <button onClick={() => setBellsEnabled(prev => !prev)} aria-pressed={bellsEnabled}>
+                {bellsEnabled ? <Bell size={18} /> : <BellOff size={18} />}
+              </button>
+
+              <div>
+                <button onClick={() => setShowSettings(!showSettings)}>
+                  <Settings size={20} />
+                </button>
+
+                {showSettings && (
+                  <div>
+                    {scheduledSessions.length > 0 && (
+                      <div>
+                        <div>UPCOMING SESSIONS</div>
+                        {scheduledSessions.slice(0, 2).map(session => (
+                          <div key={session.id}>
+                            <span></span>
+                            <span>{session.serviceTitle}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <button onClick={() => { setShowSettings(false); setShowPricing(true); }}><span>💰</span> Plans & Pricing</button>
+                    <button onClick={() => setShowSettings(false)}><span>📋</span> Terms of Use</button>
+                    <button onClick={() => setShowSettings(false)}><span>🔒</span> Privacy Policy</button>
+                    <button onClick={() => { setShowSettings(false); setShowAdmin(true); }}><span>🔐</span> Admin Portal</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </nav>
+
+          <main>
+            {currentView === AppView.HOME && (
+              <div>
+                <div>SYSTEM ONLINE // V2.0</div>
+                <h1>UPGRADE YOUR REALITY</h1>
+                <p>Access 50+ specialized micro-services designed to optimize your day in exactly 25 minutes.</p>
+                <button onClick={() => setCurrentView(AppView.MENU)}>INITIATE BOOKING</button>
+
+                <div>
+                  <div><span>50+</span> MODULES</div>
+                  <div><span>25m</span> DURATION</div>
+                  <div><span>1:1</span> ZOOM</div>
+                </div>
+              </div>
+            )}
+
+            {currentView === AppView.MENU && (
+              <MenuGrid onSelectService={handleServiceSelect} />
+            )}
+
+            {currentView === AppView.BOOKING && (
+              <BookingCalendar onConfirm={handleSlotConfirm} onBack={() => setCurrentView(AppView.MENU)} />
+            )}
+
+            {currentView === AppView.PROFILE && (
+              <UserProfile profile={userProfile} onUpdateProfile={handleUpdateProfile} onBack={() => setCurrentView(AppView.HOME)} />
+            )}
+
+            {currentView === AppView.CONFIRMATION && selectedServiceData && (
+              <div>
+                <button onClick={() => setCurrentView(AppView.BOOKING)}><ArrowLeft size={16} /> CHANGE TIME</button>
+
+                <div>
+                  <div>
+                    <CheckCircle size={32} />
+                    <h2>SECURE SLOT</h2>
+                    <p>Finalize your 25-minute session.</p>
+                  </div>
+
+                  <div>
+                    <div><span>SERVICE</span><span>{selectedServiceData.title}</span></div>
+                    <div><span>DATE</span><span>{booking.date && format(booking.date, 'MMMM do, yyyy')}</span></div>
+                    <div><span>TIME</span><span>{booking.timeSlot}</span></div>
+                  </div>
+
+                  <form onSubmit={handleFinalizeBooking}>
+                    <div>
+                      <label>IDENTIFIER (NAME)</label>
+                      <input required type="text" value={booking.userName} onChange={e => setBooking(b => ({ ...b, userName: e.target.value }))} placeholder="John Doe" />
+                    </div>
+                    <div>
+                      <label>CONTACT (EMAIL)</label>
+                      <input required type="email" value={booking.userEmail} onChange={e => setBooking(b => ({ ...b, userEmail: e.target.value }))} placeholder="john@example.com" />
+                    </div>
+
+                    <button type="submit">INITIALIZE LINK</button>
+                  </form>
+                </div>
+              </div>
+            )}
+          </main>
+
+          {activeSession && (
+            <div>
+              <button onClick={() => setShowLiveSession(true)}>
+                <div><img src={activeSession.hostImage} alt={activeSession.hostName} /></div>
+                <div><div>Session Ready</div><div>Join Now</div></div>
+                <Radio size={20} />
+              </button>
+            </div>
+          )}
+
+          <AIChat />
+
+          {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
+          {showAdmin && <AdminPortal onClose={() => setShowAdmin(false)} />}
+
+          {showLiveSession && activeSession && (
+            <LiveSession hostName={activeSession.hostName} hostImage={activeSession.hostImage} sessionTitle={activeSession.serviceTitle} customerName={activeSession.customerName} customerEmail={activeSession.customerEmail} customerBio={activeSession.customerBio} scheduledTime={activeSession.timeSlot} isHostView={true} onEndSession={() => { setShowLiveSession(false); setScheduledSessions(prev => prev.filter(s => s.id !== activeSession.id)); setActiveSession(null); }} />
+          )}
+
+          <footer>
+            <p>DAYMAKER2DAY SYSTEM © 2024 // STATUS: OPTIMAL</p>
+          </footer>
+        </>
+      )}
+    </>
   );
 };
 
